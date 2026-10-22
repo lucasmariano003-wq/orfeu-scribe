@@ -1,0 +1,46 @@
+/* The pill follows GNOME's on-screen display look: dark, rounded, system font. */
+.orfeuscribe-pill { border-radius: 999px; padding: 8px 16px 8px 12px; spacing: 10px; color: #ffffff;
+  background-color: rgba(30, 30, 30, 0.94); box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.35); }
+.orfeuscribe-pill-icon { icon-size: 16px; color: #ffffff; }
+.orfeuscribe-pill-label { font-weight: 600; }
+.orfeuscribe-pill-time { font-feature-settings: "tnum"; min-width: 36px; color: rgba(255, 255, 255, 0.75); }
+.orfeuscribe-waves { spacing: 3px; height: 28px; }
+.orfeuscribe-wave { width: 3px; border-radius: 2px; background-color: #8cc0de; }
+.orfeuscribe-pill-button { padding: 3px 12px; border-radius: 999px; font-weight: 600; color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.14); }
+.orfeuscribe-pill-button:hover { background-color: rgba(255, 255, 255, 0.24); }
+.orfeuscribe-pill-button:active { background-color: rgba(255, 255, 255, 0.08); }
+
+.orfeuscribe-pill.listening .orfeuscribe-pill-icon { color: #f66151; }
+.orfeuscribe-pill.working .orfeuscribe-wave { background-color: rgba(255, 255, 255, 0.55); }
+.orfeuscribe-pill.done .orfeuscribe-pill-icon { color: #8ff0a4; }
+.orfeuscribe-pill.error .orfeuscribe-pill-icon,
+.orfeuscribe-pill.error .orfeuscribe-pill-label { color: #ffa29a; }
+.orfeuscribe-pill.warning .orfeuscribe-pill-label { color: #f9e2a2; }
+.orfeuscribe-pill.live .orfeuscribe-pill-label { font-weight: 400; font-style: italic; }
+
+/* Answer card. */
+.orfeuscribe-card { width: 560px; padding: 18px 20px 14px; spacing: 12px; border-radius: 14px;
+  background-color: #fafafb; color: #1e1e1e; border: 1px solid rgba(0, 0, 0, 0.10);
+  box-shadow: 0 10px 28px 0 rgba(0, 0, 0, 0.30); }
+.orfeuscribe-card-head { spacing: 10px; }
+.orfeuscribe-card-title { font-weight: 700; }
+.orfeuscribe-card-note { font-size: 0.9em; color: rgba(0, 0, 0, 0.60); }
+.orfeuscribe-card-body { font-size: 1.05em; }
+.orfeuscribe-card-scroll { max-height: 320px; }
+.orfeuscribe-card-actions { spacing: 8px; }
+.orfeuscribe-card-button { padding: 6px 16px; border-radius: 8px; font-weight: 600;
+  background-color: rgba(0, 0, 0, 0.08); color: #1e1e1e; }
+.orfeuscribe-card-button:hover { background-color: rgba(0, 0, 0, 0.12); }
+.orfeuscribe-card-button:focus { box-shadow: inset 0 0 0 2px rgba(53, 132, 228, 0.6); }
+.orfeuscribe-card-button.flat { background-color: transparent; }
+.orfeuscribe-card-button.flat:hover { background-color: rgba(0, 0, 0, 0.06); }
+.orfeuscribe-card-button.suggested { background-color: #2e6a8e; color: #ffffff; }
+.orfeuscribe-card-button.suggested:hover { background-color: #357aa3; }
+
+.orfeuscribe-card.dark { background-color: #303034; color: #ffffff; border-color: rgba(255, 255, 255, 0.10); }
+.orfeuscribe-card.dark .orfeuscribe-card-note { color: rgba(255, 255, 255, 0.65); }
+.orfeuscribe-card.dark .orfeuscribe-card-button { background-color: rgba(255, 255, 255, 0.10); color: #ffffff; }
+.orfeuscribe-card.dark .orfeuscribe-card-button:hover { background-color: rgba(255, 255, 255, 0.15); }
+.orfeuscribe-card.dark .orfeuscribe-card-button.flat { background-color: transparent; }
+.orfeuscribe-card.dark .orfeuscribe-card-button.suggested { background-color: #3f84ad; }

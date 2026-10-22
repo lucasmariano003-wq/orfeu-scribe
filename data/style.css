@@ -1,0 +1,20 @@
+/* Orfeu Scribe follows libadwaita's look; this file only sizes a few widgets. */
+
+.record-button {
+  min-width: 96px;
+  min-height: 96px;
+  padding: 0;
+}
+
+.record-button image {
+  -gtk-icon-size: 40px;
+}
+
+.result-card {
+  padding: 12px 14px;
+}
+
+.vocabulary-sheet > textview,
+.vocabulary-sheet > textview > text {
+  background-color: transparent;
+}

@@ -1,0 +1,1703 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Orfeu Scribe\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: orfeuscribe/__main__.py:32
+msgid "Error: the file is larger than 25 MB."
+msgstr ""
+
+#: orfeuscribe/__main__.py:63
+msgid "Dictation cancelled by the spoken command. No text delivered."
+msgstr ""
+
+#: orfeuscribe/__main__.py:66 orfeuscribe/__main__.py:108
+#, python-brace-format
+msgid "Error: {message}"
+msgstr ""
+
+#: orfeuscribe/__main__.py:69
+msgid "Error: could not read the WAV file."
+msgstr ""
+
+#: orfeuscribe/__main__.py:84
+#, python-brace-format
+msgid "{count} entry exported with private permissions."
+msgid_plural "{count} entries exported with private permissions."
+msgstr[0] ""
+msgstr[1] ""
+
+#: orfeuscribe/__main__.py:88
+#, python-brace-format
+msgid "{count} entry added to the history."
+msgid_plural "{count} entries added to the history."
+msgstr[0] ""
+msgstr[1] ""
+
+#: orfeuscribe/__main__.py:101
+#, python-brace-format
+msgid "Transcription saved as history entry {ident}."
+msgstr ""
+
+#: orfeuscribe/__main__.py:105
+msgid "Transcription cancelled. Nothing was added."
+msgstr ""
+
+#: orfeuscribe/__main__.py:111
+msgid "Could not finish. Check the file, the permissions and the connection."
+msgstr ""
+
+#: orfeuscribe/__main__.py:153
+msgid "Orfeu Scribe needs the system Python with GTK 4, libadwaita and GStreamer. Start it from the installed launcher."
+msgstr ""
+
+#: orfeuscribe/audio.py:57
+msgid "The chosen microphone is not available. Pick another one in Settings."
+msgstr ""
+
+#: orfeuscribe/audio.py:72
+msgid "A GStreamer recording component is missing."
+msgstr ""
+
+#: orfeuscribe/audio.py:77
+msgid "Could not connect the microphone to the recorder."
+msgstr ""
+
+#: orfeuscribe/audio.py:83
+msgid "Could not start the microphone."
+msgstr ""
+
+#: orfeuscribe/audio.py:102
+msgid "Could not read the microphone. Check the audio input in Settings."
+msgstr ""
+
+#: orfeuscribe/audio.py:198
+msgid "The microphone is not picking anything up. Check the input in Settings."
+msgstr ""
+
+#: orfeuscribe/audio.py:199
+msgid "The audio is clipping: move a little away from the microphone."
+msgstr ""
+
+#: orfeuscribe/audio.py:200
+msgid "The audio is very quiet: move closer to the microphone."
+msgstr ""
+
+#: orfeuscribe/credentials.py:60 orfeuscribe/credentials.py:71 orfeuscribe/credentials.py:77
+msgid "The keyring is locked or unavailable."
+msgstr ""
+
+#: orfeuscribe/credentials.py:63
+msgid "speech-to-text API key"
+msgstr ""
+
+#: orfeuscribe/credentials.py:63
+msgid "text revision API key"
+msgstr ""
+
+#: orfeuscribe/credentials.py:67
+msgid "The keyring did not accept the key."
+msgstr ""
+
+#: orfeuscribe/credentials.py:87
+msgid "No keyring is available. Set the key with an environment variable instead."
+msgstr ""
+
+#: orfeuscribe/exchange.py:33 orfeuscribe/exchange.py:99
+msgid "Choose a .md or .csv file."
+msgstr ""
+
+#: orfeuscribe/exchange.py:57
+msgid "The copy does not have all the fields of a Orfeu Scribe entry."
+msgstr ""
+
+#: orfeuscribe/exchange.py:64 orfeuscribe/exchange.py:66
+msgid "Invalid timing in the copy."
+msgstr ""
+
+#: orfeuscribe/exchange.py:69
+msgid "Invalid text in the copy."
+msgstr ""
+
+#: orfeuscribe/exchange.py:79
+msgid "The copy is larger than 64 MB. Import it in parts."
+msgstr ""
+
+#: orfeuscribe/exchange.py:84
+msgid "Choose a CSV file exported by Orfeu Scribe."
+msgstr ""
+
+#: orfeuscribe/exchange.py:88
+msgid "Unknown copy version."
+msgstr ""
+
+#: orfeuscribe/exchange.py:96
+msgid "Choose a Markdown file exported by Orfeu Scribe."
+msgstr ""
+
+#: orfeuscribe/history.py:159
+msgid "Write the correction before saving."
+msgstr ""
+
+#: orfeuscribe/history.py:164 orfeuscribe/history.py:199
+msgid "This entry is no longer in the history."
+msgstr ""
+
+#: orfeuscribe/history.py:195
+msgid "The transcript is empty."
+msgstr ""
+
+#: orfeuscribe/languages.py:14
+msgid "English"
+msgstr ""
+
+#: orfeuscribe/languages.py:14
+msgid "Portuguese"
+msgstr ""
+
+#: orfeuscribe/languages.py:14
+msgid "Spanish"
+msgstr ""
+
+#: orfeuscribe/languages.py:14
+msgid "French"
+msgstr ""
+
+#: orfeuscribe/languages.py:15
+msgid "German"
+msgstr ""
+
+#: orfeuscribe/languages.py:15
+msgid "Italian"
+msgstr ""
+
+#: orfeuscribe/languages.py:15
+msgid "Latin"
+msgstr ""
+
+#: orfeuscribe/media.py:25 orfeuscribe/service.py:828
+msgid "Choose an audio or video file (MP4, MKV, WebM, WAV, MP3, M4A, OGG or FLAC)."
+msgstr ""
+
+#: orfeuscribe/media.py:35
+msgid "A GStreamer component needed to open the file is missing."
+msgstr ""
+
+#: orfeuscribe/media.py:45
+msgid "Could not prepare the audio of the file."
+msgstr ""
+
+#: orfeuscribe/media.py:74
+msgid "Could not open the audio track."
+msgstr ""
+
+#: orfeuscribe/media.py:81 orfeuscribe/media.py:100
+msgid "The file has no usable audio track."
+msgstr ""
+
+#: orfeuscribe/media.py:83
+msgid "Could not decode the file. Check the format and the installed codecs."
+msgstr ""
+
+#: orfeuscribe/media.py:126
+#, python-brace-format
+msgid "Part {number}"
+msgstr ""
+
+#: orfeuscribe/media.py:133
+#, python-brace-format
+msgid "Part {number}: revision pending; the transcript was kept."
+msgstr ""
+
+#: orfeuscribe/media.py:140
+msgid "No audio was found to transcribe."
+msgstr ""
+
+#: orfeuscribe/modes.py:11 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:46
+msgid "Revised text"
+msgstr ""
+
+#: orfeuscribe/modes.py:11 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:46
+msgid "Literal dictation"
+msgstr ""
+
+#: orfeuscribe/modes.py:11 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:47
+msgid "Message"
+msgstr ""
+
+#: orfeuscribe/modes.py:12 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:47
+msgid "Email"
+msgstr ""
+
+#: orfeuscribe/modes.py:12 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:47
+msgid "AI instruction"
+msgstr ""
+
+#: orfeuscribe/modes.py:12 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:48
+msgid "Talk outline"
+msgstr ""
+
+#: orfeuscribe/modes.py:13 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:48
+msgid "Video script"
+msgstr ""
+
+#: orfeuscribe/modes.py:15
+msgid "Clean prose with punctuation and paragraphs."
+msgstr ""
+
+#: orfeuscribe/modes.py:16
+msgid "Your words in your order; only punctuation and spelling."
+msgstr ""
+
+#: orfeuscribe/modes.py:17
+msgid "Short chat messages, without added formalities."
+msgstr ""
+
+#: orfeuscribe/modes.py:18
+msgid "Clear paragraphs. Greeting and sign-off only when dictated."
+msgstr ""
+
+#: orfeuscribe/modes.py:19
+msgid "Requirements organized for an AI assistant, never answered."
+msgstr ""
+
+#: orfeuscribe/modes.py:20
+msgid "“New point” and “quotation” become structure; nothing is invented."
+msgstr ""
+
+#: orfeuscribe/modes.py:21
+msgid "“New scene”, “hard cut” and “on screen” become structure, in spoken order."
+msgstr ""
+
+#: orfeuscribe/modes.py:24 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:386
+msgid "Question"
+msgstr ""
+
+#: orfeuscribe/modes.py:24
+msgid "Translation"
+msgstr ""
+
+#: orfeuscribe/modes.py:24
+msgid "Note"
+msgstr ""
+
+#: orfeuscribe/modes.py:25 orfeuscribe/window.py:412
+msgid "Edit"
+msgstr ""
+
+#: orfeuscribe/modes.py:25 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:388
+msgid "Draft"
+msgstr ""
+
+#: orfeuscribe/modes.py:25
+msgid "File"
+msgstr ""
+
+#: orfeuscribe/notes.py:21
+msgid "The note is empty."
+msgstr ""
+
+#: orfeuscribe/notes.py:37
+msgid "The destination is not a regular note file."
+msgstr ""
+
+#: orfeuscribe/notes.py:73
+msgid "No notes folder is configured. The text stayed in the history."
+msgstr ""
+
+#: orfeuscribe/notes.py:76
+msgid "That folder is not in the allowed list in Settings. The note stayed in the history."
+msgstr ""
+
+#: orfeuscribe/notes.py:79
+msgid "The configured notes folder is not available."
+msgstr ""
+
+#: orfeuscribe/notes.py:82
+msgid "The notes subfolder cannot be a link."
+msgstr ""
+
+#: orfeuscribe/pipeline.py:222
+msgid "The model did not keep a formatting command. Your transcript is in the history."
+msgstr ""
+
+#: orfeuscribe/providers/__init__.py:53 orfeuscribe/service.py:387
+msgid "No speech service is configured. Open Settings → Service."
+msgstr ""
+
+#: orfeuscribe/providers/__init__.py:57
+msgid "This needs a text revision service. Turn it on in Settings → Service."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:48
+msgid "The service rejected the request (HTTP 400). Check the model name."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:49
+msgid "The service rejected the API key. Check it in Settings → Service."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:50
+msgid "The service refused this request. Check the account's permissions."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:51
+msgid "Endpoint or model not found. Check the server URL and the model name."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:52 orfeuscribe/providers/openai_compat.py:167
+msgid "The audio is too large for the service."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:53
+msgid "Rate limit or quota reached. Wait a moment and try again."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:54
+#, python-brace-format
+msgid "The service returned an error (HTTP {status}). Try again."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:60
+msgid "Use an https:// server URL (http:// is accepted only for this computer)."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:74
+msgid "The API key could not be read."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:94
+msgid "Could not reach the service. Check the connection and the server URL."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:96
+msgid "The service returned an invalid response."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:103
+msgid "The service did not list any models."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:165
+msgid "The audio is empty."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:172
+msgid "No speech was found in this audio. Check the microphone and try again."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:213
+msgid "The model reached its length limit. Your transcript was kept."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:219
+msgid "The model returned no text. Your transcript was kept."
+msgstr ""
+
+#: orfeuscribe/providers/openai_compat.py:246
+msgid "The answer did not come in a safe format. The selection was kept."
+msgstr ""
+
+#: orfeuscribe/rescue.py:23
+msgid "Failed"
+msgstr ""
+
+#: orfeuscribe/rescue.py:23
+msgid "Cancelled"
+msgstr ""
+
+#: orfeuscribe/rescue.py:23
+msgid "Cancelled by voice"
+msgstr ""
+
+#: orfeuscribe/service.py:333
+msgid "Dictation in progress"
+msgstr ""
+
+#: orfeuscribe/service.py:399
+msgid "Reply with context is off in Settings: plain dictation."
+msgstr ""
+
+#: orfeuscribe/service.py:465
+msgid "The dictation was too short. Speak a little longer and try again."
+msgstr ""
+
+#: orfeuscribe/service.py:659
+msgid "Could not finish the dictation. Try again."
+msgstr ""
+
+#: orfeuscribe/service.py:686
+msgid "Could not add the note. The text is in the history."
+msgstr ""
+
+#: orfeuscribe/service.py:699
+msgid "Could not save the dictation in the history. Check the free disk space."
+msgstr ""
+
+#: orfeuscribe/service.py:715
+msgid "Recovered: the entry is in the history"
+msgstr ""
+
+#: orfeuscribe/service.py:722
+msgid "Added to your notes"
+msgstr ""
+
+#: orfeuscribe/service.py:728
+msgid "Saved to history"
+msgstr ""
+
+#: orfeuscribe/service.py:810
+msgid "Could not apply the history retention. Check the free disk space."
+msgstr ""
+
+#: orfeuscribe/service.py:821
+msgid "Finish or cancel the current work first."
+msgstr ""
+
+#: orfeuscribe/service.py:875
+msgid "Could not transcribe the file. Check the format and the connection, then try again."
+msgstr ""
+
+#: orfeuscribe/settings.py:26
+msgid "The settings schema is not compiled. Run ./install.sh or scripts/compile_schemas.sh."
+msgstr ""
+
+#: orfeuscribe/watcher.py:11
+msgid "Off · no device opened"
+msgstr ""
+
+#: orfeuscribe/watcher.py:11
+msgid "Waiting for the GNOME Shell extension"
+msgstr ""
+
+#: orfeuscribe/watcher.py:12
+msgid "Paused · no device opened"
+msgstr ""
+
+#: orfeuscribe/watcher.py:12
+msgid "Starting…"
+msgstr ""
+
+#: orfeuscribe/watcher.py:13
+msgid "Active"
+msgstr ""
+
+#: orfeuscribe/watcher.py:13
+msgid "Waiting for a keyboard"
+msgstr ""
+
+#: orfeuscribe/watcher.py:14
+msgid "No read access to input devices"
+msgstr ""
+
+#: orfeuscribe/watcher.py:15
+msgid "Interrupted · trying again"
+msgstr ""
+
+#: orfeuscribe/window.py:23 orfeuscribe/window.py:233
+msgid "Dictate"
+msgstr ""
+
+#: orfeuscribe/window.py:23
+msgid "Start and finish a dictation in any app."
+msgstr ""
+
+#: orfeuscribe/window.py:24
+msgid "Ask"
+msgstr ""
+
+#: orfeuscribe/window.py:24
+msgid "Ask a question; the answer appears in a card."
+msgstr ""
+
+#: orfeuscribe/window.py:25
+msgid "Translate"
+msgstr ""
+
+#: orfeuscribe/window.py:25
+msgid "Dictate and paste the translation."
+msgstr ""
+
+#: orfeuscribe/window.py:26
+msgid "Edit selection or write"
+msgstr ""
+
+#: orfeuscribe/window.py:26
+msgid "With a selection: “make it shorter”. Without: “write a…”."
+msgstr ""
+
+#: orfeuscribe/window.py:27 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:389
+msgid "Reply with context"
+msgstr ""
+
+#: orfeuscribe/window.py:27
+msgid "Only when the option is on under Privacy."
+msgstr ""
+
+#: orfeuscribe/window.py:28
+msgid "Revert to transcript"
+msgstr ""
+
+#: orfeuscribe/window.py:28
+msgid "Up to 10 s after a paste."
+msgstr ""
+
+#: orfeuscribe/window.py:29
+msgid "Paste last dictation"
+msgstr ""
+
+#: orfeuscribe/window.py:29
+msgid "Pastes the last result again."
+msgstr ""
+
+#: orfeuscribe/window.py:31
+msgid "Ready"
+msgstr ""
+
+#: orfeuscribe/window.py:31 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:99 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:526 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:642
+msgid "Listening…"
+msgstr ""
+
+#: orfeuscribe/window.py:31
+msgid "Transcribing…"
+msgstr ""
+
+#: orfeuscribe/window.py:32
+msgid "Revising…"
+msgstr ""
+
+#: orfeuscribe/window.py:32 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:526
+msgid "Done"
+msgstr ""
+
+#: orfeuscribe/window.py:32 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:527
+msgid "Something went wrong"
+msgstr ""
+
+#: orfeuscribe/window.py:33
+msgid "Opening the file…"
+msgstr ""
+
+#: orfeuscribe/window.py:33
+msgid "Transcribing"
+msgstr ""
+
+#: orfeuscribe/window.py:33
+msgid "Revising"
+msgstr ""
+
+#: orfeuscribe/window.py:34
+msgid "Part kept in memory"
+msgstr ""
+
+#: orfeuscribe/window.py:34
+msgid "Transcription saved to history"
+msgstr ""
+
+#: orfeuscribe/window.py:35
+msgid "Transcription cancelled"
+msgstr ""
+
+#: orfeuscribe/window.py:35
+msgid "Could not finish"
+msgstr ""
+
+#: orfeuscribe/window.py:36 orfeuscribe/window.py:1013 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:46
+msgid "Automatic"
+msgstr ""
+
+#: orfeuscribe/window.py:36
+msgid "Keywords field (gpt-transcribe)"
+msgstr ""
+
+#: orfeuscribe/window.py:37
+msgid "Prompt field (Whisper and compatible servers)"
+msgstr ""
+
+#: orfeuscribe/window.py:37
+msgid "Don't send hints"
+msgstr ""
+
+#: orfeuscribe/window.py:91
+#, python-brace-format
+msgid "{value:.1f} s"
+msgstr ""
+
+#: orfeuscribe/window.py:119
+msgid "No speech service is set up yet."
+msgstr ""
+
+#: orfeuscribe/window.py:119
+msgid "Set Up"
+msgstr ""
+
+#: orfeuscribe/window.py:130
+msgid "Dictation"
+msgstr ""
+
+#: orfeuscribe/window.py:132
+msgid "History"
+msgstr ""
+
+#: orfeuscribe/window.py:133 orfeuscribe/window.py:570 orfeuscribe/window.py:576
+msgid "Vocabulary"
+msgstr ""
+
+#: orfeuscribe/window.py:135
+msgid "Settings"
+msgstr ""
+
+#: orfeuscribe/window.py:149
+msgid "Transcribe a File…"
+msgstr ""
+
+#: orfeuscribe/window.py:150
+msgid "Export History…"
+msgstr ""
+
+#: orfeuscribe/window.py:151
+msgid "Import History…"
+msgstr ""
+
+#: orfeuscribe/window.py:154
+msgid "About Orfeu Scribe"
+msgstr ""
+
+#: orfeuscribe/window.py:157
+msgid "Main Menu"
+msgstr ""
+
+#: orfeuscribe/window.py:169
+msgid "Orfeu Scribe contributors"
+msgstr ""
+
+#: orfeuscribe/window.py:170
+msgid "Voice dictation for GNOME with a speech service you choose."
+msgstr ""
+
+#: orfeuscribe/window.py:172
+msgid "Derived from"
+msgstr ""
+
+#: orfeuscribe/window.py:195
+msgid "Copied to the clipboard."
+msgstr ""
+
+#: orfeuscribe/window.py:201
+msgid "Set up a speech service"
+msgstr ""
+
+#: orfeuscribe/window.py:202
+msgid "Orfeu Scribe sends your recorded audio to a speech-to-text service you choose. Nothing is sent until you set one up."
+msgstr ""
+
+#: orfeuscribe/window.py:205
+msgid "Open Settings"
+msgstr ""
+
+#: orfeuscribe/window.py:220
+msgid "Voice level"
+msgstr ""
+
+#: orfeuscribe/window.py:225 orfeuscribe/window.py:287 orfeuscribe/window.py:392 orfeuscribe/window.py:468 orfeuscribe/window.py:519 orfeuscribe/window.py:856 orfeuscribe/window.py:917 orfeuscribe/window.py:1210
+msgid "Cancel"
+msgstr ""
+
+#: orfeuscribe/window.py:229
+msgid "Shortcut:"
+msgstr ""
+
+#: orfeuscribe/window.py:230
+msgid "not set"
+msgstr ""
+
+#: orfeuscribe/window.py:232 orfeuscribe/window.py:1242
+msgid "Choose…"
+msgstr ""
+
+#: orfeuscribe/window.py:238
+msgid "Dismiss"
+msgstr ""
+
+#: orfeuscribe/window.py:243
+msgid "Last Result"
+msgstr ""
+
+#: orfeuscribe/window.py:245 orfeuscribe/window.py:376 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:446
+msgid "Copy"
+msgstr ""
+
+#: orfeuscribe/window.py:259
+msgid "GNOME Shell extension"
+msgstr ""
+
+#: orfeuscribe/window.py:259 orfeuscribe/window.py:695
+msgid "Checking…"
+msgstr ""
+
+#: orfeuscribe/window.py:276
+msgid "Search text or app"
+msgstr ""
+
+#: orfeuscribe/window.py:279
+msgid "All"
+msgstr ""
+
+#: orfeuscribe/window.py:279
+msgid "Dictations"
+msgstr ""
+
+#: orfeuscribe/window.py:279
+msgid "Questions"
+msgstr ""
+
+#: orfeuscribe/window.py:280
+msgid "Filter"
+msgstr ""
+
+#: orfeuscribe/window.py:285
+msgid "Transcribing a File"
+msgstr ""
+
+#: orfeuscribe/window.py:291
+msgid "Transcription progress"
+msgstr ""
+
+#: orfeuscribe/window.py:313
+msgid "Waiting for Recovery"
+msgstr ""
+
+#: orfeuscribe/window.py:314
+msgid "The audio of these dictations is kept for 24 hours in a private folder. Recover transcribes and revises it again."
+msgstr ""
+
+#: orfeuscribe/window.py:323
+#, python-brace-format
+msgid "{app} · {length:.0f} s of audio · kept until {until}"
+msgstr ""
+
+#: orfeuscribe/window.py:326 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:118
+msgid "Recover"
+msgstr ""
+
+#: orfeuscribe/window.py:328
+msgid "Discard"
+msgstr ""
+
+#: orfeuscribe/window.py:334
+msgid "Transcribing the kept audio again. The entry will appear in the history."
+msgstr ""
+
+#: orfeuscribe/window.py:336
+msgid "Finish the current work first, or the audio has expired."
+msgstr ""
+
+#: orfeuscribe/window.py:352
+msgid "No matching entries"
+msgstr ""
+
+#: orfeuscribe/window.py:352
+msgid "No dictations yet"
+msgstr ""
+
+#: orfeuscribe/window.py:353
+msgid "Try other words or another filter."
+msgstr ""
+
+#: orfeuscribe/window.py:354
+msgid "Each dictation is saved here with its transcript and final text."
+msgstr ""
+
+#: orfeuscribe/window.py:370
+msgid "reverted to transcript"
+msgstr ""
+
+#: orfeuscribe/window.py:370
+msgid "edited"
+msgstr ""
+
+#: orfeuscribe/window.py:383
+msgid "Edit text"
+msgstr ""
+
+#: orfeuscribe/window.py:393 orfeuscribe/window.py:591 orfeuscribe/window.py:1091
+msgid "Save"
+msgstr ""
+
+#: orfeuscribe/window.py:396
+msgid "The revision did not finish. The transcript is kept below."
+msgstr ""
+
+#: orfeuscribe/window.py:401
+msgid "Original revision"
+msgstr ""
+
+#: orfeuscribe/window.py:404 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:113
+msgid "Transcript"
+msgstr ""
+
+#: orfeuscribe/window.py:407
+#, python-brace-format
+msgid "{service} · {model} · transcription {stt} · revision {revision}"
+msgstr ""
+
+#: orfeuscribe/window.py:411
+msgid "Copy Transcript"
+msgstr ""
+
+#: orfeuscribe/window.py:418 orfeuscribe/window.py:981 orfeuscribe/window.py:1039 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:70
+msgid "Mode"
+msgstr ""
+
+#: orfeuscribe/window.py:423
+msgid "Rewrite"
+msgstr ""
+
+#: orfeuscribe/window.py:426
+msgid "Recover From Audio"
+msgstr ""
+
+#: orfeuscribe/window.py:427 orfeuscribe/window.py:469
+msgid "Delete"
+msgstr ""
+
+#: orfeuscribe/window.py:448
+msgid "Could not save the edit. Your text is still open."
+msgstr ""
+
+#: orfeuscribe/window.py:456
+msgid "Edit saved."
+msgstr ""
+
+#: orfeuscribe/window.py:460
+msgid "Revising again. A new entry will be saved in the history."
+msgstr ""
+
+#: orfeuscribe/window.py:462
+msgid "Finish or cancel the current dictation first."
+msgstr ""
+
+#: orfeuscribe/window.py:465
+msgid "Delete this entry?"
+msgstr ""
+
+#: orfeuscribe/window.py:466
+msgid "Deletes the text, any kept audio and its contribution to suggestions. Earlier exports are not affected."
+msgstr ""
+
+#: orfeuscribe/window.py:483
+msgid "Entry deleted."
+msgstr ""
+
+#: orfeuscribe/window.py:485
+msgid "Could not delete the entry. Check access to the history."
+msgstr ""
+
+#: orfeuscribe/window.py:499
+msgid "Transcribe an Audio or Video File"
+msgstr ""
+
+#: orfeuscribe/window.py:511
+msgid "Export History"
+msgstr ""
+
+#: orfeuscribe/window.py:512
+msgid "The copy is created with private permissions and can be imported back."
+msgstr ""
+
+#: orfeuscribe/window.py:514
+msgid "Entries"
+msgstr ""
+
+#: orfeuscribe/window.py:514
+msgid "All entries"
+msgstr ""
+
+#: orfeuscribe/window.py:514
+msgid "Current search and filter"
+msgstr ""
+
+#: orfeuscribe/window.py:515
+msgid "Format"
+msgstr ""
+
+#: orfeuscribe/window.py:520
+msgid "Choose File…"
+msgstr ""
+
+#: orfeuscribe/window.py:529
+msgid "Save History Copy"
+msgstr ""
+
+#: orfeuscribe/window.py:529
+msgid "Orfeu Scribe history"
+msgstr ""
+
+#: orfeuscribe/window.py:538
+#, python-brace-format
+msgid "{count} entry exported."
+msgid_plural "{count} entries exported."
+msgstr[0] ""
+msgstr[1] ""
+
+#: orfeuscribe/window.py:542
+msgid "Could not save the copy."
+msgstr ""
+
+#: orfeuscribe/window.py:549
+msgid "Import a Orfeu Scribe Export (.md or .csv)"
+msgstr ""
+
+#: orfeuscribe/window.py:558
+#, python-brace-format
+msgid "{count} entry added."
+msgid_plural "{count} entries added."
+msgstr[0] ""
+msgstr[1] ""
+
+#: orfeuscribe/window.py:562
+msgid "Could not import. Choose a file exported by Orfeu Scribe."
+msgstr ""
+
+#: orfeuscribe/window.py:571
+msgid "Names and terms you use, one per line. To fix a recurring misspelling, write: wrong => right. Terms are sent to the speech and revision services as spelling hints."
+msgstr ""
+
+#: orfeuscribe/window.py:598
+#, python-brace-format
+msgid "{count} term saved."
+msgid_plural "{count} terms saved."
+msgstr[0] ""
+msgstr[1] ""
+
+#: orfeuscribe/window.py:599
+msgid "The vocabulary is empty."
+msgstr ""
+
+#: orfeuscribe/window.py:606
+msgid "Suggestions"
+msgstr ""
+
+#: orfeuscribe/window.py:607
+msgid "Swaps that repeated in your edits. They only enter the vocabulary if you accept them."
+msgstr ""
+
+#: orfeuscribe/window.py:611
+#, python-brace-format
+msgid "In {count} edited entry"
+msgid_plural "In {count} edited entries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: orfeuscribe/window.py:613
+msgid "Reject"
+msgstr ""
+
+#: orfeuscribe/window.py:614
+msgid "Accept"
+msgstr ""
+
+#: orfeuscribe/window.py:621
+msgid "Save your vocabulary changes before accepting a suggestion."
+msgstr ""
+
+#: orfeuscribe/window.py:629 orfeuscribe/window.py:639
+msgid "Could not save. Try again."
+msgstr ""
+
+#: orfeuscribe/window.py:633
+msgid "Spelling added to the vocabulary."
+msgstr ""
+
+#: orfeuscribe/window.py:633
+msgid "This suggestion was already resolved."
+msgstr ""
+
+#: orfeuscribe/window.py:642
+msgid "Suggestion rejected. It will not be offered again."
+msgstr ""
+
+#: orfeuscribe/window.py:651
+msgid "Vocabulary saved."
+msgstr ""
+
+#: orfeuscribe/window.py:680
+msgid "Speech-to-Text Service"
+msgstr ""
+
+#: orfeuscribe/window.py:681
+msgid "Recorded audio is sent to this server for transcription. Any server with an OpenAI-compatible /audio/transcriptions endpoint works; http:// is accepted only for this computer."
+msgstr ""
+
+#: orfeuscribe/window.py:684 orfeuscribe/window.py:724
+msgid "Server URL"
+msgstr ""
+
+#: orfeuscribe/window.py:687 orfeuscribe/window.py:735
+msgid "Model"
+msgstr ""
+
+#: orfeuscribe/window.py:690 orfeuscribe/window.py:739
+msgid "List models"
+msgstr ""
+
+#: orfeuscribe/window.py:692 orfeuscribe/window.py:728
+msgid "API key"
+msgstr ""
+
+#: orfeuscribe/window.py:695 orfeuscribe/window.py:731
+msgid "Key"
+msgstr ""
+
+#: orfeuscribe/window.py:696 orfeuscribe/window.py:732
+msgid "Remove"
+msgstr ""
+
+#: orfeuscribe/window.py:699
+msgid "Vocabulary hints"
+msgstr ""
+
+#: orfeuscribe/window.py:700
+msgid "How your vocabulary and language reach the speech service."
+msgstr ""
+
+#: orfeuscribe/window.py:706
+msgid "Fill In OpenAI Defaults"
+msgstr ""
+
+#: orfeuscribe/window.py:713
+msgid "Text Revision"
+msgstr ""
+
+#: orfeuscribe/window.py:714
+msgid "A language model turns the transcript into clean text, using an OpenAI-compatible /chat/completions endpoint. Without it, Orfeu Scribe applies spoken commands, your vocabulary and capitalization locally."
+msgstr ""
+
+#: orfeuscribe/window.py:718
+msgid "Revise text with a language model"
+msgstr ""
+
+#: orfeuscribe/window.py:720
+msgid "Use the same server and key"
+msgstr ""
+
+#: orfeuscribe/window.py:720
+msgid "As set for speech-to-text above."
+msgstr ""
+
+#: orfeuscribe/window.py:741
+msgid "Understand intent"
+msgstr ""
+
+#: orfeuscribe/window.py:742
+msgid "Organizes ideas, applies asides such as “make it more formal” and keeps only your final decision. Revised text, Message, Email and AI instruction modes."
+msgstr ""
+
+#: orfeuscribe/window.py:764
+msgid "OpenAI address filled in. Add your API key and choose a revision model."
+msgstr ""
+
+#: orfeuscribe/window.py:769
+msgid "Use an https:// address (http:// only for this computer), without user, query or fragment."
+msgstr ""
+
+#: orfeuscribe/window.py:773
+msgid "Server saved."
+msgstr ""
+
+#: orfeuscribe/window.py:778
+msgid "Model saved."
+msgstr ""
+
+#: orfeuscribe/window.py:791
+msgid "Could not save the key."
+msgstr ""
+
+#: orfeuscribe/window.py:795
+msgid "Key saved in the keyring."
+msgstr ""
+
+#: orfeuscribe/window.py:803
+msgid "Key removed from the keyring."
+msgstr ""
+
+#: orfeuscribe/window.py:813
+#, python-brace-format
+msgid "Taken from the {name} environment variable."
+msgstr ""
+
+#: orfeuscribe/window.py:820
+msgid "Saved in the keyring."
+msgstr ""
+
+#: orfeuscribe/window.py:820
+msgid "Not set. Local servers may not need one."
+msgstr ""
+
+#: orfeuscribe/window.py:838
+msgid "Save the server URL and a model first."
+msgstr ""
+
+#: orfeuscribe/window.py:840
+msgid "Asking the server for its models…"
+msgstr ""
+
+#: orfeuscribe/window.py:853
+msgid "Choose a Model"
+msgstr ""
+
+#: orfeuscribe/window.py:853
+msgid "Models listed by the server."
+msgstr ""
+
+#: orfeuscribe/window.py:857
+msgid "Choose"
+msgstr ""
+
+#: orfeuscribe/window.py:870
+msgid "Shortcuts"
+msgstr ""
+
+#: orfeuscribe/window.py:871
+msgid "Shortcuts work in any app through the GNOME Shell extension. None is set by default, so Orfeu Scribe never takes a combination that something else already uses."
+msgstr ""
+
+#: orfeuscribe/window.py:877
+msgid "Not set"
+msgstr ""
+
+#: orfeuscribe/window.py:881
+msgid "Set shortcut"
+msgstr ""
+
+#: orfeuscribe/window.py:883
+msgid "Clear shortcut"
+msgstr ""
+
+#: orfeuscribe/window.py:885
+msgid "Shortcut behavior"
+msgstr ""
+
+#: orfeuscribe/window.py:886
+msgid "Press to start, press again to finish"
+msgstr ""
+
+#: orfeuscribe/window.py:887
+msgid "Hold while speaking"
+msgstr ""
+
+#: orfeuscribe/window.py:892
+msgid "Physical key gestures"
+msgstr ""
+
+#: orfeuscribe/window.py:892
+msgid "Advanced · off by default"
+msgstr ""
+
+#: orfeuscribe/window.py:893
+msgid "Watch modifier gestures"
+msgstr ""
+
+#: orfeuscribe/window.py:898
+msgid "What it does"
+msgstr ""
+
+#: orfeuscribe/window.py:899
+msgid "Reads keyboard devices directly to recognize four gestures: Left Super alone (dictate), Left Alt+X (ask), Left Alt+Left Shift (translate) and Ctrl+Right Shift+V (paste last). Requires read access to /dev/input, which on most systems means joining the “input” group — a broad permission. No key is recorded or sent."
+msgstr ""
+
+#: orfeuscribe/window.py:906
+msgid "Status"
+msgstr ""
+
+#: orfeuscribe/window.py:912
+#, python-brace-format
+msgid "Set Shortcut: {name}"
+msgstr ""
+
+#: orfeuscribe/window.py:913
+msgid "Press the new key combination, with Super, Ctrl or Alt. Escape cancels; Backspace clears."
+msgstr ""
+
+#: orfeuscribe/window.py:935
+msgid "Use at least one of Super, Ctrl or Alt."
+msgstr ""
+
+#: orfeuscribe/window.py:938
+msgid "That combination cannot be used."
+msgstr ""
+
+#: orfeuscribe/window.py:943
+#, python-brace-format
+msgid "Already used by {name}. Choose another combination."
+msgstr ""
+
+#: orfeuscribe/window.py:970
+#, python-brace-format
+msgid "GNOME ({name})"
+msgstr ""
+
+#: orfeuscribe/window.py:975
+msgid "Shortcut saved."
+msgstr ""
+
+#: orfeuscribe/window.py:975
+msgid "Shortcut cleared."
+msgstr ""
+
+#: orfeuscribe/window.py:978
+msgid "Modes"
+msgstr ""
+
+#: orfeuscribe/window.py:979
+msgid "In automatic mode, the app in focus picks the mode using the rules below."
+msgstr ""
+
+#: orfeuscribe/window.py:986
+#, python-brace-format
+msgid "Offer “{name}”"
+msgstr ""
+
+#: orfeuscribe/window.py:991
+msgid "Mode by app"
+msgstr ""
+
+#: orfeuscribe/window.py:992
+msgid "The first expression that matches the window class or title wins."
+msgstr ""
+
+#: orfeuscribe/window.py:998
+msgid "Add Rule"
+msgstr ""
+
+#: orfeuscribe/window.py:999
+msgid "Save Rules"
+msgstr ""
+
+#: orfeuscribe/window.py:1034
+msgid "e.g. slack|discord"
+msgstr ""
+
+#: orfeuscribe/window.py:1035
+msgid "Window expression"
+msgstr ""
+
+#: orfeuscribe/window.py:1042
+msgid "Remove rule"
+msgstr ""
+
+#: orfeuscribe/window.py:1055
+msgid "Fill in or remove empty rules, and check brackets and parentheses."
+msgstr ""
+
+#: orfeuscribe/window.py:1059
+msgid "Rules saved."
+msgstr ""
+
+#: orfeuscribe/window.py:1062
+msgid "Languages"
+msgstr ""
+
+#: orfeuscribe/window.py:1063
+msgid "Saying “in Spanish:” (or “em espanhol:”, “en español:”) at the start switches the language of one dictation."
+msgstr ""
+
+#: orfeuscribe/window.py:1066
+msgid "Spoken language"
+msgstr ""
+
+#: orfeuscribe/window.py:1070
+msgid "Translation languages, separated by semicolons"
+msgstr ""
+
+#: orfeuscribe/window.py:1075 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:72
+msgid "Translate into"
+msgstr ""
+
+#: orfeuscribe/window.py:1079 orfeuscribe/window.py:1082
+msgid "Language by app"
+msgstr ""
+
+#: orfeuscribe/window.py:1079
+msgid "One rule per line: expression => code"
+msgstr ""
+
+#: orfeuscribe/window.py:1087
+#, python-brace-format
+msgid "Codes: {codes}"
+msgstr ""
+
+#: orfeuscribe/window.py:1108
+msgid "Keep between one and twelve languages, with short names."
+msgstr ""
+
+#: orfeuscribe/window.py:1114
+msgid "Translation languages saved."
+msgstr ""
+
+#: orfeuscribe/window.py:1136
+msgid "Check the expressions and the language codes."
+msgstr ""
+
+#: orfeuscribe/window.py:1139
+msgid "Language rules saved."
+msgstr ""
+
+#: orfeuscribe/window.py:1142
+msgid "Recording"
+msgstr ""
+
+#: orfeuscribe/window.py:1144
+msgid "System default"
+msgstr ""
+
+#: orfeuscribe/window.py:1148
+msgid "Microphone"
+msgstr ""
+
+#: orfeuscribe/window.py:1153
+msgid "Start and end sounds"
+msgstr ""
+
+#: orfeuscribe/window.py:1153
+msgid "Two short notes when the microphone opens and closes."
+msgstr ""
+
+#: orfeuscribe/window.py:1154
+msgid "Stop on silence"
+msgstr ""
+
+#: orfeuscribe/window.py:1154
+msgid "After you start speaking, finish at the chosen pause."
+msgstr ""
+
+#: orfeuscribe/window.py:1157
+msgid "Pause length (seconds)"
+msgstr ""
+
+#: orfeuscribe/window.py:1161
+msgid "Deliver in parts"
+msgstr ""
+
+#: orfeuscribe/window.py:1162
+msgid "In plain dictation, pastes at pauses after 20 s and keeps listening. Takes precedence over Stop on silence."
+msgstr ""
+
+#: orfeuscribe/window.py:1167
+msgid "Privacy and History"
+msgstr ""
+
+#: orfeuscribe/window.py:1168
+msgid "The first three options send more of your data to the service. They stay off until you turn them on."
+msgstr ""
+
+#: orfeuscribe/window.py:1170
+msgid "Learn from history"
+msgstr ""
+
+#: orfeuscribe/window.py:1171
+msgid "Sends up to five earlier texts (2,500 characters in total) with each revision as style examples. Never in literal mode."
+msgstr ""
+
+#: orfeuscribe/window.py:1173
+msgid "Reply with conversation context"
+msgstr ""
+
+#: orfeuscribe/window.py:1174
+msgid "With its shortcut, reads up to 3,000 characters of the visible conversation through accessibility and sends them as support. The conversation is not stored."
+msgstr ""
+
+#: orfeuscribe/window.py:1177
+msgid "Live text"
+msgstr ""
+
+#: orfeuscribe/window.py:1178
+msgid "After 15 s of speech, transcribes new audio every 6 s to show progress in the pill. Multiplies the calls to the speech service."
+msgstr ""
+
+#: orfeuscribe/window.py:1181
+msgid "Keep history for (days)"
+msgstr ""
+
+#: orfeuscribe/window.py:1182
+msgid "0 keeps it until you delete it."
+msgstr ""
+
+#: orfeuscribe/window.py:1184
+msgid "Apply"
+msgstr ""
+
+#: orfeuscribe/window.py:1187
+msgid "Keep audio of the last dictations"
+msgstr ""
+
+#: orfeuscribe/window.py:1188
+msgid "0 keeps no audio in the history."
+msgstr ""
+
+#: orfeuscribe/window.py:1192
+msgid "Recovery"
+msgstr ""
+
+#: orfeuscribe/window.py:1193
+msgid "The audio of failed or cancelled dictations is kept for 24 hours in a private folder so you can recover them, then deleted."
+msgstr ""
+
+#: orfeuscribe/window.py:1203
+msgid "The history will be kept until you delete it."
+msgstr ""
+
+#: orfeuscribe/window.py:1205
+msgid "Apply history retention?"
+msgstr ""
+
+#: orfeuscribe/window.py:1206
+#, python-brace-format
+msgid "Entries older than {days} day will be deleted now and from then on, with their audio."
+msgid_plural "Entries older than {days} days will be deleted now and from then on, with their audio."
+msgstr[0] ""
+msgstr[1] ""
+
+#: orfeuscribe/window.py:1211
+msgid "Delete Older Entries"
+msgstr ""
+
+#: orfeuscribe/window.py:1223
+#, python-brace-format
+msgid "{count} old entry deleted."
+msgid_plural "{count} old entries deleted."
+msgstr[0] ""
+msgstr[1] ""
+
+#: orfeuscribe/window.py:1226
+msgid "Could not apply the retention."
+msgstr ""
+
+#: orfeuscribe/window.py:1237
+msgid "Notes Folder"
+msgstr ""
+
+#: orfeuscribe/window.py:1238
+msgid "Optional. When a folder is set, dictations that start with “note:” are appended to a daily Markdown file there instead of being pasted."
+msgstr ""
+
+#: orfeuscribe/window.py:1241
+msgid "Folder"
+msgstr ""
+
+#: orfeuscribe/window.py:1244
+msgid "Turn off"
+msgstr ""
+
+#: orfeuscribe/window.py:1246
+msgid "Allowed subfolders, separated by semicolons"
+msgstr ""
+
+#: orfeuscribe/window.py:1250
+msgid "Link vocabulary terms"
+msgstr ""
+
+#: orfeuscribe/window.py:1251
+msgid "Wraps terms that already have a page in the folder in [[wiki links]]."
+msgstr ""
+
+#: orfeuscribe/window.py:1258
+msgid "Off"
+msgstr ""
+
+#: orfeuscribe/window.py:1261
+msgid "Choose a Notes Folder"
+msgstr ""
+
+#: orfeuscribe/window.py:1280
+msgid "Use folder names without slashes, line breaks or “..”."
+msgstr ""
+
+#: orfeuscribe/window.py:1283
+msgid "Subfolders saved."
+msgstr ""
+
+#: orfeuscribe/window.py:1286
+msgid "Startup"
+msgstr ""
+
+#: orfeuscribe/window.py:1287
+msgid "Start at login"
+msgstr ""
+
+#: orfeuscribe/window.py:1288
+msgid "The extension also starts Orfeu Scribe in the background when GNOME starts."
+msgstr ""
+
+#: orfeuscribe/window.py:1315
+#, python-brace-format
+msgid "part {number}"
+msgstr ""
+
+#: orfeuscribe/window.py:1322
+msgid "Paused"
+msgstr ""
+
+#: orfeuscribe/window.py:1325
+msgid "automatic"
+msgstr ""
+
+#: orfeuscribe/window.py:1325
+msgid "fixed"
+msgstr ""
+
+#: orfeuscribe/window.py:1330
+msgid "Finish dictation"
+msgstr ""
+
+#: orfeuscribe/window.py:1330
+msgid "Start dictation"
+msgstr ""
+
+#: orfeuscribe/window.py:1356
+#, python-brace-format
+msgid "transcription {value}"
+msgstr ""
+
+#: orfeuscribe/window.py:1357
+#, python-brace-format
+msgid "revision {value}"
+msgstr ""
+
+#: orfeuscribe/window.py:1368
+msgid "Active. Shortcuts and pasting work in any app."
+msgstr ""
+
+#: orfeuscribe/window.py:1370
+msgid "Installed but not enabled. Enable it in the Extensions app."
+msgstr ""
+
+#: orfeuscribe/window.py:1372
+msgid "Not installed. Without it, dictate here and copy the result."
+msgstr ""
+
+#: orfeuscribe/window.py:1374
+msgid "Needs a GNOME session to paste text at the cursor."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:69
+msgid "Open Orfeu Scribe"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:75
+msgid "Pause"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:78
+msgid "Cancel dictation"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:164
+msgid "Orfeu Scribe service unavailable"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:232
+msgid "Orfeu Scribe is not installed. Run its install.sh."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:261
+msgid "Orfeu Scribe is starting. Try again."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:268
+msgid "Orfeu Scribe service unavailable. Open Orfeu Scribe."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:385
+msgid "Translation · %s"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:387
+msgid "Edit · “%s”"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:391
+msgid "listening…"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:391
+msgid "done"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:391
+msgid "working…"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:398
+msgid "Terminal: the selection cannot be edited."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:404
+msgid "The selection changed. The text was kept."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:430
+msgid "Answer"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:445
+msgid "Close"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:447
+msgid "Insert at Cursor"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:472
+msgid "Translate into: %s"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:480
+msgid "Mode: %s"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:527
+msgid "Working…"
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:654
+msgid "The audio is in History, under Waiting for Recovery."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:663
+msgid "Wait for the current paste to finish."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:668
+msgid "Text saved to history. The focused app changed."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:711
+msgid "Could not preserve the clipboard. Text saved to history."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:777
+msgid "Nothing to revert right now."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:786
+msgid "Terminal: the transcript was copied. Delete and paste."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:787 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:812
+msgid "The focus changed: the transcript was copied."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:792
+msgid "You typed after the paste: the transcript was copied."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:798
+msgid "Keys still held: the transcript was copied."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:818
+msgid "Reverted to transcript."
+msgstr ""

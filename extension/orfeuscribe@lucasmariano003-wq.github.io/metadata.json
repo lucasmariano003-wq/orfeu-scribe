@@ -1,0 +1,9 @@
+{
+  "uuid": "orfeuscribe@lucasmariano003-wq.github.io",
+  "name": "Orfeu Scribe",
+  "description": "Voice dictation into any app, with a speech service you choose. Requires the Orfeu Scribe app.",
+  "shell-version": ["51"],
+  "settings-schema": "org.gnome.shell.extensions.orfeuscribe",
+  "gettext-domain": "orfeuscribe",
+  "version": 1
+}

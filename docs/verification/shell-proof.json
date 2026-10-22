@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "synthetic_audio": true,
+  "real_microphone": false,
+  "external_service": false,
+  "nested_shell": true,
+  "extension": {
+    "state": 1,
+    "error": ""
+  },
+  "stage": "complete",
+  "pasted_text": "This is a synthetic dictation.",
+  "transcription_requests": 1,
+  "revision_requests": 1,
+  "gjs_critical_count": 0,
+  "test_environment_cleaned": true,
+  "date": "2026-10-22",
+  "application": "Orfeu Scribe",
+  "application_id": "io.github.lucasmariano003_wq.OrfeuScribe",
+  "gnome_shell_version": "51.1",
+  "scope": "Private HOME/XDG/session bus and headless compositor; host system bus available during GNOME startup; synthetic audio and a local fake HTTP server only."
+}

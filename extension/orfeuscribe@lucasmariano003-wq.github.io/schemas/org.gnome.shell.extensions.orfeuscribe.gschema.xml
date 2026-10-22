@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.orfeuscribe" path="/org/gnome/shell/extensions/orfeuscribe/">
+    <!-- Every shortcut starts empty: the user chooses free combinations in the app. -->
+    <key name="toggle-shortcut" type="as"><default>[]</default><summary>Dictate</summary></key>
+    <key name="ask-accelerator" type="as"><default>[]</default><summary>Ask a question</summary></key>
+    <key name="translate-accelerator" type="as"><default>[]</default><summary>Dictate and translate</summary></key>
+    <key name="edit-shortcut" type="as"><default>[]</default><summary>Edit the selection by voice, or write without a selection</summary></key>
+    <key name="reply-shortcut" type="as"><default>[]</default><summary>Reply using the visible conversation (only when enabled in the app)</summary></key>
+    <key name="raw-shortcut" type="as"><default>[]</default><summary>Revert the last paste to the raw transcript</summary></key>
+    <key name="paste-accelerator" type="as"><default>[]</default><summary>Paste the last dictation again</summary></key>
+    <key name="card-close-shortcut" type="as"><default>['Escape']</default><summary>Close the visible answer card</summary></key>
+    <key name="watcher-enabled" type="b"><default>false</default><summary>Watch physical modifier gestures (needs read access to /dev/input)</summary></key>
+    <key name="translation-languages" type="as"><default>['English', 'Spanish', 'Portuguese', 'French', 'German']</default><summary>Translation target languages, in order</summary></key>
+    <key name="translation-language" type="s"><default>'English'</default><summary>Last translation target</summary></key>
+    <key name="recording-mode" type="s"><default>'toggle'</default><choices><choice value="toggle"/><choice value="hold"/></choices><summary>Press to toggle or hold while speaking</summary></key>
+    <key name="fixed-mode" type="s"><default>'auto'</default><choices><choice value="auto"/><choice value="dictation"/><choice value="literal"/><choice value="message"/><choice value="email"/><choice value="prompt"/><choice value="outline"/><choice value="script"/></choices><summary>Writing mode</summary></key>
+    <key name="offered-modes" type="as"><default>['dictation', 'literal', 'message', 'email', 'prompt']</default><summary>Modes listed in the panel menu</summary></key>
+    <key name="paused" type="b"><default>false</default><summary>Pause Orfeu Scribe</summary></key>
+  </schema>
+</schemalist>

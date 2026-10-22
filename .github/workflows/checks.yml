@@ -1,0 +1,18 @@
+name: Checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: archlinux:base
+    steps:
+      - name: Install test dependencies
+        run: pacman -Syu --noconfirm --needed git python python-gobject gtk4 libadwaita gstreamer gst-plugins-base gst-plugins-good gst-libav gjs glib2 ttf-dejavu
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Isolated tests
+        run: python3 scripts/run_tests.py
+      - name: Privacy and translation checks
+        run: |
+          python3 scripts/audit.py
+          python3 scripts/extract_strings.py --check
