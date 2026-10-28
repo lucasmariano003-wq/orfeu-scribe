@@ -61,7 +61,8 @@ All identifiers live in `orfeuscribe/ids.py`:
 2. The service refuses to start if no speech service is configured. Otherwise
    it chooses the mode (fixed or by app rules) and language, starts the
    recorder and, for dictation, reads the text around the cursor through
-   AT-SPI in parallel.
+   AT-SPI in parallel. For Ask with a selection, the selection is confirmed
+   through AT-SPI in parallel too: the microphone never waits for it.
 3. On `Stop`, `_work` runs the pipeline in a thread. A newer generation
    (cancel, new dictation) discards late results.
 4. The pipeline transcribes, applies the language prefix, vocabulary

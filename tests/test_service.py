@@ -46,8 +46,27 @@ class RequestTests(unittest.TestCase):
         app.request_at = time.monotonic()
         with patch("orfeuscribe.selection.snapshot", return_value={"pid": 42}) as snapshot:
             app.start()
+            # The check runs beside the recording; the dictation waits for it only when it needs it.
+            from orfeuscribe.selection import resolve
+            self.assertEqual(resolve(app.recording_request["snapshot"], 2), {"pid": 42})
         snapshot.assert_called_once_with(42, "text", "ask")
-        self.assertEqual(app.recording_request["snapshot"], {"pid": 42})
+
+    def test_question_with_a_selection_opens_the_microphone_at_once(self):
+        app = make_app(self)
+        app.context = {"wm_class": "firefox", "title": "x"}
+        app.request = {"operation": "ask", "selection": "selected text", "pid": 4242}
+        app.request_at = time.monotonic()
+
+        def slow(*args, **kwargs):  # a large accessibility tree: the check times out
+            time.sleep(1.5)
+            raise subprocess.TimeoutExpired(args[0], 2)
+        with patch("orfeuscribe.selection.subprocess.run", side_effect=slow):
+            started = time.monotonic()
+            app.start()
+            self.assertLess(time.monotonic() - started, 0.5, "the main loop is not blocked")
+            self.assertEqual((app.state, app.recorder.started), ("listening", 1))
+            from orfeuscribe.selection import resolve
+            self.assertIsNone(resolve(app.recording_request["snapshot"], 3), "an unconfirmed selection")
 
     def test_orphan_request_expires_and_fresh_one_is_honoured(self):
         app = make_app(self)

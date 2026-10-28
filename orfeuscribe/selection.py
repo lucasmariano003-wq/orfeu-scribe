@@ -3,6 +3,7 @@ import json
 import os
 import subprocess
 import sys
+import threading
 
 from .config import ROOT
 
@@ -19,6 +20,38 @@ def snapshot(pid, selected, operation="ask"):
         return json.loads(result.stdout) if result.returncode == 0 else None
     except (OSError, subprocess.SubprocessError, ValueError):
         return None
+
+
+class PendingSnapshot:
+    """The selection check, run beside the recording: the microphone never waits for AT-SPI."""
+
+    def __init__(self, pid, selected, operation):
+        self.value = None
+        self.done = threading.Event()
+        threading.Thread(target=self._read, args=(pid, selected, operation), name="orfeuscribe-selection",
+                         daemon=True).start()
+
+    def _read(self, pid, selected, operation):
+        try:
+            self.value = snapshot(pid, selected, operation)
+        finally:
+            self.done.set()
+
+    def get(self, timeout=3.0):
+        self.done.wait(timeout)
+        return self.value if self.done.is_set() else None
+
+
+def start_snapshot(pid, selected, operation="ask"):
+    """Starts the check when it is needed (see snapshot); returns None otherwise."""
+    if operation != "ask" or not pid or not selected:
+        return None
+    return PendingSnapshot(pid, selected, operation)
+
+
+def resolve(value, timeout=3.0):
+    """The confirmed selection from a pending check (or an already resolved value)."""
+    return value.get(timeout) if isinstance(value, PendingSnapshot) else value
 
 
 def inspect(pid, selected):

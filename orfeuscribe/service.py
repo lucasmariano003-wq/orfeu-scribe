@@ -401,9 +401,11 @@ class OrfeuScribeApplication(Adw.Application):
         self.recording_context = dict(self.context)
         self.recording_context["selection"] = self.recording_request["selection"]
         self.recording_request["language"] = self.settings.get_string("translation-language")
-        from .selection import snapshot
-        self.selection_snapshot = snapshot(self.recording_request["pid"], self.recording_request["selection"],
-                                           self.recording_request["operation"])
+        from .selection import start_snapshot
+        # A question about the selection confirms it through AT-SPI, which can take seconds:
+        # it runs beside the recording and is awaited only when the result is needed.
+        self.selection_snapshot = start_snapshot(self.recording_request["pid"], self.recording_request["selection"],
+                                                 self.recording_request["operation"])
         self.recording_request["snapshot"] = self.selection_snapshot
         self.emit_bus("Operation", "(ss)", self.recording_request["operation"], self.recording_request["language"])
         self.mode = choose_mode(**self.context, rules=self.config["rules"], fixed=self.settings.get_string("fixed-mode"),
@@ -639,6 +641,8 @@ class OrfeuScribeApplication(Adw.Application):
 
         def worker():
             try:
+                from .selection import resolve
+                request["snapshot"] = resolve(request.get("snapshot"))
                 conversation = ""
                 if field is not None and field.want == "conversation":
                     conversation = (field.get(3.0) or {}).get("conversation", "")
