@@ -113,10 +113,15 @@ class InstallTests(unittest.TestCase):
         self.assert_calamus_intact()
 
     def load_installer(self):
+        import contextlib
         import importlib.util
+        import io
         spec = importlib.util.spec_from_file_location("orfeuscribe_test_installer", INSTALLER)
         installer = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(installer)
+        quiet = contextlib.redirect_stdout(io.StringIO())  # the installer's progress messages
+        quiet.__enter__()
+        self.addCleanup(quiet.__exit__, None, None, None)
         return installer
 
     def install_previous_version(self, installer):
