@@ -45,7 +45,8 @@ without it for the rest of the session and parses the JSON from the text.
 
 ### Models list — `GET {base}/models`
 
-Used only when you press *List models*.
+Used only when you press *List models*. Only the server URL (and its key) is
+needed: no model has to be chosen first.
 
 ### Safety
 
@@ -57,6 +58,10 @@ Used only when you press *List models*.
   bodies are never shown or stored (they may echo the dictation).
 - The key is read from the environment or the keyring at request time and is
   never written to settings, history or logs.
+- A key saved in the keyring is linked to the server it was saved for and is
+  sent only there; after the server URL changes, Orfeu Scribe asks before
+  sending it to the new one. A request already under way never picks up a key
+  saved meanwhile for another server.
 
 ### Verified
 
