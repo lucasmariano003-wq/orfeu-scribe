@@ -139,6 +139,87 @@ def write(path: Path, text: str, mode=0o644):
     path.chmod(mode)
 
 
+def leftovers(target: Path) -> list:
+    """Copies left beside ``target`` by an interrupted update, carrying this installer's marker."""
+    return sorted(path for pattern in (f".{target.name}.new-*", f".{target.name}.old-*")
+                  for path in target.parent.glob(pattern) if not path.is_symlink() and owned(path))
+
+
+def recover_interrupted(target: Path):
+    """After a crash between the two renames of an update, the previous version is put back."""
+    if not (target.exists() or target.is_symlink()):
+        backups = [path for path in leftovers(target) if ".old-" in path.name]
+        if backups:
+            os.rename(backups[-1], target)
+    for path in leftovers(target):
+        shutil.rmtree(path)
+
+
+def tree_listing(root: Path) -> dict:
+    return {str(path.relative_to(root)): path.stat().st_size for path in root.rglob("*")
+            if path.is_file() and path.name != MARKER}
+
+
+def stage_beside(target: Path, source: Path) -> Path:
+    """Copies ``source`` into a hidden directory next to ``target`` (same file system) and checks it."""
+    target.parent.mkdir(parents=True, exist_ok=True)
+    staged = Path(tempfile.mkdtemp(prefix=f".{target.name}.new-", dir=target.parent))
+    try:
+        # Marked first: an interrupted copy is recognised and cleaned up by the next run.
+        write(staged / MARKER, json.dumps({"installed_by": "orfeuscribe scripts/install.py"}) + "\n")
+        shutil.copytree(source, staged, dirs_exist_ok=True)
+        if tree_listing(staged) != tree_listing(source) or not owned(staged):
+            raise OSError(f"The new copy in {staged} is incomplete.")
+    except BaseException:
+        shutil.rmtree(staged, ignore_errors=True)
+        raise
+    return staged
+
+
+def swap_in(target: Path, staged: Path):
+    """Puts the staged copy in place with renames; returns the previous version's backup (or None)."""
+    backup = None
+    if target.exists() or target.is_symlink():
+        backup = Path(tempfile.mkdtemp(prefix=f".{target.name}.old-", dir=target.parent))
+        backup.rmdir()
+        os.rename(target, backup)
+    try:
+        os.rename(staged, target)
+    except BaseException:
+        if backup:
+            os.rename(backup, target)
+        raise
+    return backup
+
+
+def replace_directories(pairs):
+    """Replaces every (target, source) directory, or none: the previous versions stay until all are in place."""
+    staged, swapped = {}, []
+    try:
+        for target, source in pairs:
+            staged[target] = stage_beside(target, source)
+        try:
+            for target, _source in pairs:
+                backup = swap_in(target, staged[target])
+                del staged[target]  # In place now; a copy that failed to swap is removed below.
+                swapped.append((target, backup))
+        except BaseException:
+            for target, backup in reversed(swapped):
+                failed = Path(tempfile.mkdtemp(prefix=f".{target.name}.new-", dir=target.parent))
+                failed.rmdir()
+                os.rename(target, failed)
+                if backup:
+                    os.rename(backup, target)
+                shutil.rmtree(failed, ignore_errors=True)
+            raise
+    finally:
+        for path in staged.values():
+            shutil.rmtree(path, ignore_errors=True)
+    for _target, backup in swapped:
+        if backup:
+            shutil.rmtree(backup, ignore_errors=True)
+
+
 def install(home: Path, dry_run=False, enable_extension=False, use_xdg=False):
     target = paths(home, use_xdg)
     previous = manifest_for(target["app"])
@@ -172,12 +253,11 @@ def install(home: Path, dry_run=False, enable_extension=False, use_xdg=False):
         shutil.copytree(staging / "extension" / EXTENSION_UUID / "schemas", extension_stage / "schemas")
         if (staging / "extension" / EXTENSION_UUID / "locale").exists():
             shutil.copytree(staging / "extension" / EXTENSION_UUID / "locale", extension_stage / "locale")
-        for name, source in (("app", staging), ("extension", extension_stage)):
-            if target[name].exists():
-                shutil.rmtree(target[name])
-            target[name].parent.mkdir(parents=True, exist_ok=True)
-            shutil.copytree(source, target[name])
-            write(target[name] / MARKER, json.dumps({"installed_by": "orfeuscribe scripts/install.py"}) + "\n")
+        for name in ("app", "extension"):
+            recover_interrupted(target[name])
+        # The working version is replaced only once the new one is completely copied and
+        # checked beside it; any failure puts the previous app and extension back.
+        replace_directories([(target["app"], staging), (target["extension"], extension_stage)])
     write(target["launcher"], launcher_script(target["app"]), 0o755)
     from orfeuscribe.desktop import desktop_entry
     write(target["desktop"], desktop_entry(launcher=target["launcher"]))
@@ -215,6 +295,7 @@ def uninstall(home: Path, dry_run=False, purge=False, disable_extension=False, u
             and autostart.read_text(errors="replace") == desktop_entry(True, target["launcher"])):
         files.append(str(autostart))
     directories = [target[name] for name in ("extension", "app") if owned(target[name])]
+    directories += [path for name in ("extension", "app") for path in leftovers(target[name])]
     if purge:
         directories += [target["config"], target["data"]]
     if dry_run:

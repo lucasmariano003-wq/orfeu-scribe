@@ -86,6 +86,10 @@ gnome-extensions enable orfeuscribe@lucasmariano003-wq.github.io
 out). `./uninstall.sh` removes what was installed and keeps your settings,
 history and vocabulary; `./uninstall.sh --purge` removes those too.
 
+Running `./install.sh` again updates in place: the new version is copied and
+checked next to the installed one, then swapped in. If the copy fails (for
+example, a full disk), the version you had keeps working.
+
 ## First run
 
 1. Open **Orfeu Scribe**. Without a service, the Dictation page shows *Set up a

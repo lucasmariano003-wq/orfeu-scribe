@@ -112,6 +112,73 @@ class InstallTests(unittest.TestCase):
         self.assertFalse(config.exists() or history.exists())
         self.assert_calamus_intact()
 
+    def load_installer(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("orfeuscribe_test_installer", INSTALLER)
+        installer = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(installer)
+        return installer
+
+    def install_previous_version(self, installer):
+        """A working install whose files are marked as the previous version."""
+        with patch.object(installer, "check_dependencies", return_value=[]):
+            installer.install(self.home)
+        targets = installer.paths(self.home)
+        for name in ("app", "extension"):
+            (targets[name] / "previous-version.txt").write_text("SYNTHETIC PREVIOUS VERSION")
+        return targets
+
+    def assert_previous_version_intact(self, targets):
+        for name in ("app", "extension"):
+            self.assertEqual((targets[name] / "previous-version.txt").read_text(), "SYNTHETIC PREVIOUS VERSION", name)
+        self.assertTrue((targets["app"] / "orfeuscribe/service.py").is_file())
+        self.assertTrue((targets["extension"] / "extension.js").is_file())
+        for name in ("app", "extension"):
+            stray = [p.name for p in targets[name].parent.iterdir() if p.name.startswith(f".{targets[name].name}.")]
+            self.assertEqual(stray, [], "no half-copied or backup directory is left behind")
+
+    def test_interrupted_copy_keeps_the_working_install(self):
+        installer = self.load_installer()
+        targets = self.install_previous_version(installer)
+        original = installer.shutil.copytree
+
+        def no_space(source, destination, *args, **kwargs):
+            if Path(destination).parent in (targets["app"].parent, targets["extension"].parent):
+                raise OSError(28, "No space left on device (synthetic)")
+            return original(source, destination, *args, **kwargs)
+        with patch.object(installer, "check_dependencies", return_value=[]), \
+             patch.object(installer.shutil, "copytree", side_effect=no_space):
+            with self.assertRaises(OSError):
+                installer.install(self.home)
+        self.assert_previous_version_intact(targets)
+
+    def test_failure_while_swapping_puts_both_previous_directories_back(self):
+        installer = self.load_installer()
+        targets = self.install_previous_version(installer)
+        original = installer.os.rename
+
+        def fail_on_extension(source, destination):
+            if Path(destination) == targets["extension"] and ".new-" in Path(source).name:
+                raise OSError(5, "Input/output error (synthetic)")
+            return original(source, destination)
+        with patch.object(installer, "check_dependencies", return_value=[]), \
+             patch.object(installer.os, "rename", side_effect=fail_on_extension):
+            with self.assertRaises(OSError):
+                installer.install(self.home)
+        self.assert_previous_version_intact(targets)
+
+    def test_crash_between_renames_is_repaired_by_the_next_run(self):
+        installer = self.load_installer()
+        targets = self.install_previous_version(installer)
+        backup = targets["app"].with_name(".orfeuscribe.old-synthetic")
+        os.rename(targets["app"], backup)
+        installer.recover_interrupted(targets["app"])
+        self.assert_previous_version_intact(targets)
+        with patch.object(installer, "check_dependencies", return_value=[]):
+            installer.install(self.home)
+        self.assertFalse((targets["app"] / "previous-version.txt").exists(), "the update went through")
+        self.assertEqual([p.name for p in targets["app"].parent.iterdir()], [targets["app"].name])
+
     def test_refuses_to_replace_a_directory_it_did_not_install(self):
         foreign = self.home / ".local/lib/orfeuscribe"
         foreign.mkdir(parents=True)
