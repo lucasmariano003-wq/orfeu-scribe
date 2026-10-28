@@ -97,6 +97,22 @@ class WindowTests(unittest.TestCase):
         self.assertIsNone(self.app.rescue.get(rescue))
         self.assertIn("Entry deleted.", self.toasts)
 
+    # --- 10. Listing models needs only the server URL -----------------------------------
+    def test_list_models_works_before_any_model_is_chosen(self):
+        from orfeuscribe.providers.openai_compat import HttpClient
+        self.app.config.update(stt_base_url="http://127.0.0.1:9/v1", stt_model="", revision_model="",
+                               stt_credential_server="http://127.0.0.1:9/v1")
+        self.app.reload_provider()
+        ready = []
+        self.window._models_ready = lambda which, models, error: ready.append((which, models, error))
+        with patch.object(HttpClient, "list_models", return_value=["synthetic-model"]) as listing:
+            for which in ("stt", "revision"):
+                self.window._fetch_models(which)
+            self.assertTrue(self.pump(lambda: len(ready) == 2))
+        self.assertEqual(listing.call_count, 2)
+        self.assertEqual(sorted(ready), [("revision", ["synthetic-model"], ""), ("stt", ["synthetic-model"], "")])
+        self.assertNotIn("Save the server URL and a model first.", self.toasts)
+
 
 class PrivateDisplayTests(unittest.TestCase):
     """Runs WindowTests in a private Xvfb so the default suite exercises the real widgets."""

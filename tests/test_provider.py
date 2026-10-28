@@ -266,6 +266,24 @@ class BuildTests(unittest.TestCase):
         fresh = Config(self.config.directory / "fresh")
         self.assertEqual(fresh["stt_credential_server"], "", "a new install links nothing")
 
+    def test_models_are_listed_with_only_the_address_and_its_key(self):
+        server, = self.servers(1)
+        store = MemoryStore({"stt": "SYNTHETIC-KEY"})
+        with self.assertRaises(ProviderError):
+            providers.model_lister(self.config, store, "stt")
+        self.config.update(stt_base_url=server.url, stt_credential_server=server.url)
+        self.assertEqual((self.config["stt_model"], self.config["revision_model"]), ("", ""), "no model chosen yet")
+        self.assertFalse(providers.build(self.config, store).configured)
+        for which in ("stt", "revision"):
+            self.assertEqual(providers.model_lister(self.config, store, which).list_models(),
+                             ["fake-chat", "fake-transcribe"])
+        self.assertEqual(server.state.authorizations, ["Bearer SYNTHETIC-KEY"] * 2)
+        # A separate revision server uses its own address and key.
+        other, = self.servers(1)
+        self.config.update(revision_same_server=False, revision_base_url=other.url)
+        providers.model_lister(self.config, store, "revision").list_models()
+        self.assertEqual(other.state.authorizations, [None], "the speech key stays with the speech server")
+
     def test_environment_key_wins_and_is_read_at_request_time(self):
         store = MemoryStore({"stt": "from-store"})
         self.assertEqual(api_key(store, "stt"), "from-store")

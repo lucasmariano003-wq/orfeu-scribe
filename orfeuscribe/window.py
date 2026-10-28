@@ -898,13 +898,12 @@ class OrfeuScribeWindow(Adw.ApplicationWindow):
         threading.Thread(target=work, daemon=True).start()
 
     def _fetch_models(self, which):
-        service = self.app.provider
-        if which == "stt":
-            client = service.transcriber if getattr(service, "configured", False) else None
-        else:
-            client = getattr(service, "reviser", None)
-        if client is None:
-            self.toast(_("Save the server URL and a model first."))
+        from .providers import model_lister
+        try:
+            # The server URL and its key are enough: no model has to be chosen first.
+            client = model_lister(self.app.config, self.app.credentials, which)
+        except ProviderError as exc:
+            self.toast(str(exc))
             return
         self.toast(_("Asking the server for its models…"))
 

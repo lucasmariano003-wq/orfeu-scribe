@@ -113,6 +113,21 @@ def key_for(config, store, slot, endpoint):
     return lambda: bound_key(store, slot, endpoint, lambda: config.get(linked, ""))
 
 
+def model_lister(config, store, which):
+    """A client for ``GET /models`` on the server set for ``which`` ("stt" or "revision").
+
+    Only the address (and the key linked to it) is needed: listing the models is
+    how a new user finds the model name, so it never waits for one to be chosen.
+    """
+    from .openai_compat import HttpClient
+    same = which != "stt" and config["revision_same_server"]
+    base = config["stt_base_url"] if which == "stt" or same else config["revision_base_url"]
+    slot = "stt" if which == "stt" or same else "revision"
+    if not base:
+        raise ProviderError(_("Save the server URL first."))
+    return HttpClient(base, key_for(config, store, slot, base))
+
+
 def build(config, store=None, prompt_observer=None) -> Service:
     """A Service from the settings. Keys are looked up at request time, never stored here."""
     from ..credentials import default_store
