@@ -548,15 +548,17 @@ class OrfeuScribeWindow(Adw.ApplicationWindow):
         picker = Gtk.FileDialog(title=_("Import a Orfeu Scribe Export (.md or .csv)"))
 
         def chosen(source, result):
+            from .exchange import CopyError, import_history
             try:
                 path = source.open_finish(result).get_path()
-                from .exchange import import_history
                 count = import_history(self.app.history, path)
                 self.app.reload_history()
                 self.refresh_history()
                 self.toast(ngettext("{count} entry added.", "{count} entries added.", count).format(count=count))
             except GLib.Error:
                 pass
+            except CopyError as exc:
+                self.toast(str(exc))
             except (OSError, ValueError, TypeError, sqlite3.Error):
                 self.toast(_("Could not import. Choose a file exported by Orfeu Scribe."))
         picker.open(self, None, chosen)

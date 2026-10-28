@@ -72,7 +72,7 @@ def test_audio(args):
 
 def history_command(args):
     from .config import Config, DATA_DIR
-    from .exchange import export_history, import_history
+    from .exchange import CopyError, export_history, import_history
     from .history import FILENAME, History
     from .pipeline import Cancelled
     from .providers import ProviderError
@@ -104,7 +104,7 @@ def history_command(args):
     except (KeyboardInterrupt, Cancelled):
         print(_("Transcription cancelled. Nothing was added."), file=sys.stderr)
         return 130
-    except ProviderError as exc:
+    except (ProviderError, CopyError) as exc:
         print(_("Error: {message}").format(message=exc), file=sys.stderr)
         return 1
     except (OSError, ValueError, RuntimeError, sqlite3.Error):

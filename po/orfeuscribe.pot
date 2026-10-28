@@ -105,36 +105,44 @@ msgstr ""
 msgid "No keyring is available. Set the key with an environment variable instead."
 msgstr ""
 
-#: orfeuscribe/exchange.py:33 orfeuscribe/exchange.py:99
+#: orfeuscribe/exchange.py:51 orfeuscribe/exchange.py:119
 msgid "Choose a .md or .csv file."
 msgstr ""
 
-#: orfeuscribe/exchange.py:57
+#: orfeuscribe/exchange.py:75
 msgid "The copy does not have all the fields of a Orfeu Scribe entry."
 msgstr ""
 
-#: orfeuscribe/exchange.py:64 orfeuscribe/exchange.py:66
+#: orfeuscribe/exchange.py:82 orfeuscribe/exchange.py:84
 msgid "Invalid timing in the copy."
 msgstr ""
 
-#: orfeuscribe/exchange.py:69
+#: orfeuscribe/exchange.py:87
 msgid "Invalid text in the copy."
 msgstr ""
 
-#: orfeuscribe/exchange.py:79
-msgid "The copy is larger than 64 MB. Import it in parts."
+#: orfeuscribe/exchange.py:93
+msgid "Invalid date in the copy."
 msgstr ""
 
-#: orfeuscribe/exchange.py:84
+#: orfeuscribe/exchange.py:101
 msgid "Choose a CSV file exported by Orfeu Scribe."
 msgstr ""
 
-#: orfeuscribe/exchange.py:88
+#: orfeuscribe/exchange.py:105
 msgid "Unknown copy version."
 msgstr ""
 
-#: orfeuscribe/exchange.py:96
+#: orfeuscribe/exchange.py:116
+msgid "The copy is larger than 64 MB. Import it in parts."
+msgstr ""
+
+#: orfeuscribe/exchange.py:129
 msgid "Choose a Markdown file exported by Orfeu Scribe."
+msgstr ""
+
+#: orfeuscribe/exchange.py:136
+msgid "The copy is damaged or was not exported by Orfeu Scribe."
 msgstr ""
 
 #: orfeuscribe/history.py:159
@@ -177,7 +185,7 @@ msgstr ""
 msgid "Latin"
 msgstr ""
 
-#: orfeuscribe/media.py:25 orfeuscribe/service.py:854
+#: orfeuscribe/media.py:25 orfeuscribe/service.py:862
 msgid "Choose an audio or video file (MP4, MKV, WebM, WAV, MP3, M4A, OGG or FLAC)."
 msgstr ""
 
@@ -424,43 +432,43 @@ msgstr ""
 msgid "The dictation was too short. Speak a little longer and try again."
 msgstr ""
 
-#: orfeuscribe/service.py:670
+#: orfeuscribe/service.py:678
 msgid "Could not finish the dictation. Try again."
 msgstr ""
 
-#: orfeuscribe/service.py:697
+#: orfeuscribe/service.py:705
 msgid "Could not add the note. The text is in the history."
 msgstr ""
 
-#: orfeuscribe/service.py:705
+#: orfeuscribe/service.py:713
 msgid "Could not save the dictation in the history. Check the free disk space."
 msgstr ""
 
-#: orfeuscribe/service.py:717
+#: orfeuscribe/service.py:725
 msgid "The text was saved, but its audio could not be kept."
 msgstr ""
 
-#: orfeuscribe/service.py:741
+#: orfeuscribe/service.py:749
 msgid "Recovered: the entry is in the history"
 msgstr ""
 
-#: orfeuscribe/service.py:748
+#: orfeuscribe/service.py:756
 msgid "Added to your notes"
 msgstr ""
 
-#: orfeuscribe/service.py:754
+#: orfeuscribe/service.py:762
 msgid "Saved to history"
 msgstr ""
 
-#: orfeuscribe/service.py:836
+#: orfeuscribe/service.py:844
 msgid "Could not apply the history retention. Check the free disk space."
 msgstr ""
 
-#: orfeuscribe/service.py:847
+#: orfeuscribe/service.py:855
 msgid "Finish or cancel the current work first."
 msgstr ""
 
-#: orfeuscribe/service.py:901
+#: orfeuscribe/service.py:909
 msgid "Could not transcribe the file. Check the format and the connection, then try again."
 msgstr ""
 
@@ -608,7 +616,7 @@ msgstr ""
 msgid "Could not finish"
 msgstr ""
 
-#: orfeuscribe/window.py:36 orfeuscribe/window.py:1081 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:46
+#: orfeuscribe/window.py:36 orfeuscribe/window.py:1082 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:46
 msgid "Automatic"
 msgstr ""
 
@@ -645,7 +653,7 @@ msgstr ""
 msgid "History"
 msgstr ""
 
-#: orfeuscribe/window.py:133 orfeuscribe/window.py:570 orfeuscribe/window.py:576
+#: orfeuscribe/window.py:133 orfeuscribe/window.py:571 orfeuscribe/window.py:577
 msgid "Vocabulary"
 msgstr ""
 
@@ -705,7 +713,7 @@ msgstr ""
 msgid "Voice level"
 msgstr ""
 
-#: orfeuscribe/window.py:225 orfeuscribe/window.py:287 orfeuscribe/window.py:392 orfeuscribe/window.py:468 orfeuscribe/window.py:519 orfeuscribe/window.py:924 orfeuscribe/window.py:985 orfeuscribe/window.py:1278
+#: orfeuscribe/window.py:225 orfeuscribe/window.py:287 orfeuscribe/window.py:392 orfeuscribe/window.py:468 orfeuscribe/window.py:518 orfeuscribe/window.py:925 orfeuscribe/window.py:986 orfeuscribe/window.py:1279
 msgid "Cancel"
 msgstr ""
 
@@ -717,7 +725,7 @@ msgstr ""
 msgid "not set"
 msgstr ""
 
-#: orfeuscribe/window.py:232 orfeuscribe/window.py:1310
+#: orfeuscribe/window.py:232 orfeuscribe/window.py:1311
 msgid "Choose…"
 msgstr ""
 
@@ -737,7 +745,7 @@ msgstr ""
 msgid "GNOME Shell extension"
 msgstr ""
 
-#: orfeuscribe/window.py:259 orfeuscribe/window.py:695
+#: orfeuscribe/window.py:259 orfeuscribe/window.py:696
 msgid "Checking…"
 msgstr ""
 
@@ -826,7 +834,7 @@ msgstr ""
 msgid "Edit text"
 msgstr ""
 
-#: orfeuscribe/window.py:393 orfeuscribe/window.py:591 orfeuscribe/window.py:1159
+#: orfeuscribe/window.py:393 orfeuscribe/window.py:592 orfeuscribe/window.py:1160
 msgid "Save"
 msgstr ""
 
@@ -851,7 +859,7 @@ msgstr ""
 msgid "Copy Transcript"
 msgstr ""
 
-#: orfeuscribe/window.py:418 orfeuscribe/window.py:1049 orfeuscribe/window.py:1107 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:70
+#: orfeuscribe/window.py:418 orfeuscribe/window.py:1050 orfeuscribe/window.py:1108 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:70
 msgid "Mode"
 msgstr ""
 
@@ -891,724 +899,724 @@ msgstr ""
 msgid "Deletes the text, any kept audio and its contribution to suggestions. Earlier exports are not affected."
 msgstr ""
 
-#: orfeuscribe/window.py:483
+#: orfeuscribe/window.py:482
 msgid "Entry deleted."
 msgstr ""
 
-#: orfeuscribe/window.py:485
+#: orfeuscribe/window.py:484
 msgid "Could not delete the entry. Check access to the history."
 msgstr ""
 
-#: orfeuscribe/window.py:499
+#: orfeuscribe/window.py:498
 msgid "Transcribe an Audio or Video File"
 msgstr ""
 
-#: orfeuscribe/window.py:511
+#: orfeuscribe/window.py:510
 msgid "Export History"
 msgstr ""
 
-#: orfeuscribe/window.py:512
+#: orfeuscribe/window.py:511
 msgid "The copy is created with private permissions and can be imported back."
 msgstr ""
 
-#: orfeuscribe/window.py:514
+#: orfeuscribe/window.py:513
 msgid "Entries"
 msgstr ""
 
-#: orfeuscribe/window.py:514
+#: orfeuscribe/window.py:513
 msgid "All entries"
 msgstr ""
 
-#: orfeuscribe/window.py:514
+#: orfeuscribe/window.py:513
 msgid "Current search and filter"
 msgstr ""
 
-#: orfeuscribe/window.py:515
+#: orfeuscribe/window.py:514
 msgid "Format"
 msgstr ""
 
-#: orfeuscribe/window.py:520
+#: orfeuscribe/window.py:519
 msgid "Choose File…"
 msgstr ""
 
-#: orfeuscribe/window.py:529
+#: orfeuscribe/window.py:528
 msgid "Save History Copy"
 msgstr ""
 
-#: orfeuscribe/window.py:529
+#: orfeuscribe/window.py:528
 msgid "Orfeu Scribe history"
 msgstr ""
 
-#: orfeuscribe/window.py:538
+#: orfeuscribe/window.py:537
 #, python-brace-format
 msgid "{count} entry exported."
 msgid_plural "{count} entries exported."
 msgstr[0] ""
 msgstr[1] ""
 
-#: orfeuscribe/window.py:542
+#: orfeuscribe/window.py:541
 msgid "Could not save the copy."
 msgstr ""
 
-#: orfeuscribe/window.py:549
+#: orfeuscribe/window.py:548
 msgid "Import a Orfeu Scribe Export (.md or .csv)"
 msgstr ""
 
-#: orfeuscribe/window.py:558
+#: orfeuscribe/window.py:557
 #, python-brace-format
 msgid "{count} entry added."
 msgid_plural "{count} entries added."
 msgstr[0] ""
 msgstr[1] ""
 
-#: orfeuscribe/window.py:562
+#: orfeuscribe/window.py:563
 msgid "Could not import. Choose a file exported by Orfeu Scribe."
 msgstr ""
 
-#: orfeuscribe/window.py:571
+#: orfeuscribe/window.py:572
 msgid "Names and terms you use, one per line. To fix a recurring misspelling, write: wrong => right. Terms are sent to the speech and revision services as spelling hints."
 msgstr ""
 
-#: orfeuscribe/window.py:598
+#: orfeuscribe/window.py:599
 #, python-brace-format
 msgid "{count} term saved."
 msgid_plural "{count} terms saved."
 msgstr[0] ""
 msgstr[1] ""
 
-#: orfeuscribe/window.py:599
+#: orfeuscribe/window.py:600
 msgid "The vocabulary is empty."
 msgstr ""
 
-#: orfeuscribe/window.py:606
+#: orfeuscribe/window.py:607
 msgid "Suggestions"
 msgstr ""
 
-#: orfeuscribe/window.py:607
+#: orfeuscribe/window.py:608
 msgid "Swaps that repeated in your edits. They only enter the vocabulary if you accept them."
 msgstr ""
 
-#: orfeuscribe/window.py:611
+#: orfeuscribe/window.py:612
 #, python-brace-format
 msgid "In {count} edited entry"
 msgid_plural "In {count} edited entries"
 msgstr[0] ""
 msgstr[1] ""
 
-#: orfeuscribe/window.py:613
+#: orfeuscribe/window.py:614
 msgid "Reject"
 msgstr ""
 
-#: orfeuscribe/window.py:614
+#: orfeuscribe/window.py:615
 msgid "Accept"
 msgstr ""
 
-#: orfeuscribe/window.py:621
+#: orfeuscribe/window.py:622
 msgid "Save your vocabulary changes before accepting a suggestion."
 msgstr ""
 
-#: orfeuscribe/window.py:629 orfeuscribe/window.py:639
+#: orfeuscribe/window.py:630 orfeuscribe/window.py:640
 msgid "Could not save. Try again."
 msgstr ""
 
-#: orfeuscribe/window.py:633
+#: orfeuscribe/window.py:634
 msgid "Spelling added to the vocabulary."
 msgstr ""
 
-#: orfeuscribe/window.py:633
+#: orfeuscribe/window.py:634
 msgid "This suggestion was already resolved."
 msgstr ""
 
-#: orfeuscribe/window.py:642
+#: orfeuscribe/window.py:643
 msgid "Suggestion rejected. It will not be offered again."
 msgstr ""
 
-#: orfeuscribe/window.py:651
+#: orfeuscribe/window.py:652
 msgid "Vocabulary saved."
 msgstr ""
 
-#: orfeuscribe/window.py:680
+#: orfeuscribe/window.py:681
 msgid "Speech-to-Text Service"
 msgstr ""
 
-#: orfeuscribe/window.py:681
+#: orfeuscribe/window.py:682
 msgid "Recorded audio is sent to this server for transcription. Any server with an OpenAI-compatible /audio/transcriptions endpoint works; http:// is accepted only for this computer."
 msgstr ""
 
-#: orfeuscribe/window.py:684 orfeuscribe/window.py:724
+#: orfeuscribe/window.py:685 orfeuscribe/window.py:725
 msgid "Server URL"
 msgstr ""
 
-#: orfeuscribe/window.py:687 orfeuscribe/window.py:735
+#: orfeuscribe/window.py:688 orfeuscribe/window.py:736
 msgid "Model"
 msgstr ""
 
-#: orfeuscribe/window.py:690 orfeuscribe/window.py:739
+#: orfeuscribe/window.py:691 orfeuscribe/window.py:740
 msgid "List models"
 msgstr ""
 
-#: orfeuscribe/window.py:692 orfeuscribe/window.py:728
+#: orfeuscribe/window.py:693 orfeuscribe/window.py:729
 msgid "API key"
 msgstr ""
 
-#: orfeuscribe/window.py:695 orfeuscribe/window.py:731
+#: orfeuscribe/window.py:696 orfeuscribe/window.py:732
 msgid "Key"
 msgstr ""
 
-#: orfeuscribe/window.py:696 orfeuscribe/window.py:732
+#: orfeuscribe/window.py:697 orfeuscribe/window.py:733
 msgid "Remove"
 msgstr ""
 
-#: orfeuscribe/window.py:699
+#: orfeuscribe/window.py:700
 msgid "Vocabulary hints"
 msgstr ""
 
-#: orfeuscribe/window.py:700
+#: orfeuscribe/window.py:701
 msgid "How your vocabulary and language reach the speech service."
 msgstr ""
 
-#: orfeuscribe/window.py:706
+#: orfeuscribe/window.py:707
 msgid "Fill In OpenAI Defaults"
 msgstr ""
 
-#: orfeuscribe/window.py:713
+#: orfeuscribe/window.py:714
 msgid "Text Revision"
 msgstr ""
 
-#: orfeuscribe/window.py:714
+#: orfeuscribe/window.py:715
 msgid "A language model turns the transcript into clean text, using an OpenAI-compatible /chat/completions endpoint. Without it, Orfeu Scribe applies spoken commands, your vocabulary and capitalization locally."
 msgstr ""
 
-#: orfeuscribe/window.py:718
+#: orfeuscribe/window.py:719
 msgid "Revise text with a language model"
 msgstr ""
 
-#: orfeuscribe/window.py:720
+#: orfeuscribe/window.py:721
 msgid "Use the same server and key"
 msgstr ""
 
-#: orfeuscribe/window.py:720
+#: orfeuscribe/window.py:721
 msgid "As set for speech-to-text above."
 msgstr ""
 
-#: orfeuscribe/window.py:741
+#: orfeuscribe/window.py:742
 msgid "Understand intent"
 msgstr ""
 
-#: orfeuscribe/window.py:742
+#: orfeuscribe/window.py:743
 msgid "Organizes ideas, applies asides such as “make it more formal” and keeps only your final decision. Revised text, Message, Email and AI instruction modes."
 msgstr ""
 
-#: orfeuscribe/window.py:764
+#: orfeuscribe/window.py:765
 msgid "OpenAI address filled in. Add your API key and choose a revision model."
 msgstr ""
 
-#: orfeuscribe/window.py:769
+#: orfeuscribe/window.py:770
 msgid "Use an https:// address (http:// only for this computer), without user, query or fragment."
 msgstr ""
 
-#: orfeuscribe/window.py:779
+#: orfeuscribe/window.py:780
 msgid "Server saved."
 msgstr ""
 
-#: orfeuscribe/window.py:810
+#: orfeuscribe/window.py:811
 msgid "Send the saved key to the new server?"
 msgstr ""
 
-#: orfeuscribe/window.py:811
+#: orfeuscribe/window.py:812
 #, python-brace-format
 msgid "The saved API key was set for {old}. Use it with {new} only if both addresses belong to the same account; otherwise, enter the new server's key."
 msgstr ""
 
-#: orfeuscribe/window.py:814
+#: orfeuscribe/window.py:815
 msgid "Don't Send"
 msgstr ""
 
-#: orfeuscribe/window.py:815
+#: orfeuscribe/window.py:816
 msgid "Use the Key Here"
 msgstr ""
 
-#: orfeuscribe/window.py:832
+#: orfeuscribe/window.py:833
 msgid "Model saved."
 msgstr ""
 
-#: orfeuscribe/window.py:850
+#: orfeuscribe/window.py:851
 msgid "Could not save the key."
 msgstr ""
 
-#: orfeuscribe/window.py:856
+#: orfeuscribe/window.py:857
 msgid "Key saved in the keyring."
 msgstr ""
 
-#: orfeuscribe/window.py:865
+#: orfeuscribe/window.py:866
 msgid "Key removed from the keyring."
 msgstr ""
 
-#: orfeuscribe/window.py:875
+#: orfeuscribe/window.py:876
 #, python-brace-format
 msgid "Taken from the {name} environment variable."
 msgstr ""
 
-#: orfeuscribe/window.py:882
+#: orfeuscribe/window.py:883
 msgid "Saved in the keyring."
 msgstr ""
 
-#: orfeuscribe/window.py:882
+#: orfeuscribe/window.py:883
 msgid "Not set. Local servers may not need one."
 msgstr ""
 
-#: orfeuscribe/window.py:888
+#: orfeuscribe/window.py:889
 #, python-brace-format
 msgid "Saved for {server}. It is not sent to the server above."
 msgstr ""
 
-#: orfeuscribe/window.py:890
+#: orfeuscribe/window.py:891
 msgid "Saved, but not linked to a server yet. Save the server URL to use it."
 msgstr ""
 
-#: orfeuscribe/window.py:906
+#: orfeuscribe/window.py:907
 msgid "Save the server URL and a model first."
 msgstr ""
 
-#: orfeuscribe/window.py:908
+#: orfeuscribe/window.py:909
 msgid "Asking the server for its models…"
 msgstr ""
 
-#: orfeuscribe/window.py:921
+#: orfeuscribe/window.py:922
 msgid "Choose a Model"
 msgstr ""
 
-#: orfeuscribe/window.py:921
+#: orfeuscribe/window.py:922
 msgid "Models listed by the server."
 msgstr ""
 
-#: orfeuscribe/window.py:925
+#: orfeuscribe/window.py:926
 msgid "Choose"
 msgstr ""
 
-#: orfeuscribe/window.py:938
+#: orfeuscribe/window.py:939
 msgid "Shortcuts"
 msgstr ""
 
-#: orfeuscribe/window.py:939
+#: orfeuscribe/window.py:940
 msgid "Shortcuts work in any app through the GNOME Shell extension. None is set by default, so Orfeu Scribe never takes a combination that something else already uses."
 msgstr ""
 
-#: orfeuscribe/window.py:945
+#: orfeuscribe/window.py:946
 msgid "Not set"
 msgstr ""
 
-#: orfeuscribe/window.py:949
+#: orfeuscribe/window.py:950
 msgid "Set shortcut"
 msgstr ""
 
-#: orfeuscribe/window.py:951
+#: orfeuscribe/window.py:952
 msgid "Clear shortcut"
 msgstr ""
 
-#: orfeuscribe/window.py:953
+#: orfeuscribe/window.py:954
 msgid "Shortcut behavior"
 msgstr ""
 
-#: orfeuscribe/window.py:954
+#: orfeuscribe/window.py:955
 msgid "Press to start, press again to finish"
 msgstr ""
 
-#: orfeuscribe/window.py:955
+#: orfeuscribe/window.py:956
 msgid "Hold while speaking"
 msgstr ""
 
-#: orfeuscribe/window.py:960
+#: orfeuscribe/window.py:961
 msgid "Physical key gestures"
 msgstr ""
 
-#: orfeuscribe/window.py:960
+#: orfeuscribe/window.py:961
 msgid "Advanced · off by default"
 msgstr ""
 
-#: orfeuscribe/window.py:961
+#: orfeuscribe/window.py:962
 msgid "Watch modifier gestures"
 msgstr ""
 
-#: orfeuscribe/window.py:966
+#: orfeuscribe/window.py:967
 msgid "What it does"
 msgstr ""
 
-#: orfeuscribe/window.py:967
+#: orfeuscribe/window.py:968
 msgid "Reads keyboard devices directly to recognize four gestures: Left Super alone (dictate), Left Alt+X (ask), Left Alt+Left Shift (translate) and Ctrl+Right Shift+V (paste last). Requires read access to /dev/input, which on most systems means joining the “input” group — a broad permission. No key is recorded or sent."
 msgstr ""
 
-#: orfeuscribe/window.py:974
+#: orfeuscribe/window.py:975
 msgid "Status"
 msgstr ""
 
-#: orfeuscribe/window.py:980
+#: orfeuscribe/window.py:981
 #, python-brace-format
 msgid "Set Shortcut: {name}"
 msgstr ""
 
-#: orfeuscribe/window.py:981
+#: orfeuscribe/window.py:982
 msgid "Press the new key combination, with Super, Ctrl or Alt. Escape cancels; Backspace clears."
 msgstr ""
 
-#: orfeuscribe/window.py:1003
+#: orfeuscribe/window.py:1004
 msgid "Use at least one of Super, Ctrl or Alt."
 msgstr ""
 
-#: orfeuscribe/window.py:1006
+#: orfeuscribe/window.py:1007
 msgid "That combination cannot be used."
 msgstr ""
 
-#: orfeuscribe/window.py:1011
+#: orfeuscribe/window.py:1012
 #, python-brace-format
 msgid "Already used by {name}. Choose another combination."
 msgstr ""
 
-#: orfeuscribe/window.py:1038
+#: orfeuscribe/window.py:1039
 #, python-brace-format
 msgid "GNOME ({name})"
 msgstr ""
 
-#: orfeuscribe/window.py:1043
+#: orfeuscribe/window.py:1044
 msgid "Shortcut saved."
 msgstr ""
 
-#: orfeuscribe/window.py:1043
+#: orfeuscribe/window.py:1044
 msgid "Shortcut cleared."
 msgstr ""
 
-#: orfeuscribe/window.py:1046
+#: orfeuscribe/window.py:1047
 msgid "Modes"
 msgstr ""
 
-#: orfeuscribe/window.py:1047
+#: orfeuscribe/window.py:1048
 msgid "In automatic mode, the app in focus picks the mode using the rules below."
 msgstr ""
 
-#: orfeuscribe/window.py:1054
+#: orfeuscribe/window.py:1055
 #, python-brace-format
 msgid "Offer “{name}”"
 msgstr ""
 
-#: orfeuscribe/window.py:1059
+#: orfeuscribe/window.py:1060
 msgid "Mode by app"
 msgstr ""
 
-#: orfeuscribe/window.py:1060
+#: orfeuscribe/window.py:1061
 msgid "The first expression that matches the window class or title wins."
 msgstr ""
 
-#: orfeuscribe/window.py:1066
+#: orfeuscribe/window.py:1067
 msgid "Add Rule"
 msgstr ""
 
-#: orfeuscribe/window.py:1067
+#: orfeuscribe/window.py:1068
 msgid "Save Rules"
 msgstr ""
 
-#: orfeuscribe/window.py:1102
+#: orfeuscribe/window.py:1103
 msgid "e.g. slack|discord"
 msgstr ""
 
-#: orfeuscribe/window.py:1103
+#: orfeuscribe/window.py:1104
 msgid "Window expression"
 msgstr ""
 
-#: orfeuscribe/window.py:1110
+#: orfeuscribe/window.py:1111
 msgid "Remove rule"
 msgstr ""
 
-#: orfeuscribe/window.py:1123
+#: orfeuscribe/window.py:1124
 msgid "Fill in or remove empty rules, and check brackets and parentheses."
 msgstr ""
 
-#: orfeuscribe/window.py:1127
+#: orfeuscribe/window.py:1128
 msgid "Rules saved."
 msgstr ""
 
-#: orfeuscribe/window.py:1130
+#: orfeuscribe/window.py:1131
 msgid "Languages"
 msgstr ""
 
-#: orfeuscribe/window.py:1131
+#: orfeuscribe/window.py:1132
 msgid "Saying “in Spanish:” (or “em espanhol:”, “en español:”) at the start switches the language of one dictation."
 msgstr ""
 
-#: orfeuscribe/window.py:1134
+#: orfeuscribe/window.py:1135
 msgid "Spoken language"
 msgstr ""
 
-#: orfeuscribe/window.py:1138
+#: orfeuscribe/window.py:1139
 msgid "Translation languages, separated by semicolons"
 msgstr ""
 
-#: orfeuscribe/window.py:1143 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:72
+#: orfeuscribe/window.py:1144 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:72
 msgid "Translate into"
 msgstr ""
 
-#: orfeuscribe/window.py:1147 orfeuscribe/window.py:1150
+#: orfeuscribe/window.py:1148 orfeuscribe/window.py:1151
 msgid "Language by app"
 msgstr ""
 
-#: orfeuscribe/window.py:1147
+#: orfeuscribe/window.py:1148
 msgid "One rule per line: expression => code"
 msgstr ""
 
-#: orfeuscribe/window.py:1155
+#: orfeuscribe/window.py:1156
 #, python-brace-format
 msgid "Codes: {codes}"
 msgstr ""
 
-#: orfeuscribe/window.py:1176
+#: orfeuscribe/window.py:1177
 msgid "Keep between one and twelve languages, with short names."
 msgstr ""
 
-#: orfeuscribe/window.py:1182
+#: orfeuscribe/window.py:1183
 msgid "Translation languages saved."
 msgstr ""
 
-#: orfeuscribe/window.py:1204
+#: orfeuscribe/window.py:1205
 msgid "Check the expressions and the language codes."
 msgstr ""
 
-#: orfeuscribe/window.py:1207
+#: orfeuscribe/window.py:1208
 msgid "Language rules saved."
 msgstr ""
 
-#: orfeuscribe/window.py:1210
+#: orfeuscribe/window.py:1211
 msgid "Recording"
 msgstr ""
 
-#: orfeuscribe/window.py:1212
+#: orfeuscribe/window.py:1213
 msgid "System default"
 msgstr ""
 
-#: orfeuscribe/window.py:1216
+#: orfeuscribe/window.py:1217
 msgid "Microphone"
 msgstr ""
 
-#: orfeuscribe/window.py:1221
+#: orfeuscribe/window.py:1222
 msgid "Start and end sounds"
 msgstr ""
 
-#: orfeuscribe/window.py:1221
+#: orfeuscribe/window.py:1222
 msgid "Two short notes when the microphone opens and closes."
 msgstr ""
 
-#: orfeuscribe/window.py:1222
+#: orfeuscribe/window.py:1223
 msgid "Stop on silence"
 msgstr ""
 
-#: orfeuscribe/window.py:1222
+#: orfeuscribe/window.py:1223
 msgid "After you start speaking, finish at the chosen pause."
 msgstr ""
 
-#: orfeuscribe/window.py:1225
+#: orfeuscribe/window.py:1226
 msgid "Pause length (seconds)"
 msgstr ""
 
-#: orfeuscribe/window.py:1229
+#: orfeuscribe/window.py:1230
 msgid "Deliver in parts"
 msgstr ""
 
-#: orfeuscribe/window.py:1230
+#: orfeuscribe/window.py:1231
 msgid "In plain dictation, pastes at pauses after 20 s and keeps listening. Takes precedence over Stop on silence."
 msgstr ""
 
-#: orfeuscribe/window.py:1235
+#: orfeuscribe/window.py:1236
 msgid "Privacy and History"
 msgstr ""
 
-#: orfeuscribe/window.py:1236
+#: orfeuscribe/window.py:1237
 msgid "The first three options send more of your data to the service. They stay off until you turn them on."
 msgstr ""
 
-#: orfeuscribe/window.py:1238
+#: orfeuscribe/window.py:1239
 msgid "Learn from history"
 msgstr ""
 
-#: orfeuscribe/window.py:1239
+#: orfeuscribe/window.py:1240
 msgid "Sends up to five earlier texts (2,500 characters in total) with each revision as style examples. Never in literal mode."
 msgstr ""
 
-#: orfeuscribe/window.py:1241
+#: orfeuscribe/window.py:1242
 msgid "Reply with conversation context"
 msgstr ""
 
-#: orfeuscribe/window.py:1242
+#: orfeuscribe/window.py:1243
 msgid "With its shortcut, reads up to 3,000 characters of the visible conversation through accessibility and sends them as support. The conversation is not stored."
 msgstr ""
 
-#: orfeuscribe/window.py:1245
+#: orfeuscribe/window.py:1246
 msgid "Live text"
 msgstr ""
 
-#: orfeuscribe/window.py:1246
+#: orfeuscribe/window.py:1247
 msgid "After 15 s of speech, transcribes new audio every 6 s to show progress in the pill. Multiplies the calls to the speech service."
 msgstr ""
 
-#: orfeuscribe/window.py:1249
+#: orfeuscribe/window.py:1250
 msgid "Keep history for (days)"
 msgstr ""
 
-#: orfeuscribe/window.py:1250
+#: orfeuscribe/window.py:1251
 msgid "0 keeps it until you delete it."
 msgstr ""
 
-#: orfeuscribe/window.py:1252
+#: orfeuscribe/window.py:1253
 msgid "Apply"
 msgstr ""
 
-#: orfeuscribe/window.py:1255
+#: orfeuscribe/window.py:1256
 msgid "Keep audio of the last dictations"
 msgstr ""
 
-#: orfeuscribe/window.py:1256
+#: orfeuscribe/window.py:1257
 msgid "0 keeps no audio in the history."
 msgstr ""
 
-#: orfeuscribe/window.py:1260
+#: orfeuscribe/window.py:1261
 msgid "Recovery"
 msgstr ""
 
-#: orfeuscribe/window.py:1261
+#: orfeuscribe/window.py:1262
 msgid "The audio of failed or cancelled dictations is kept for 24 hours in a private folder so you can recover them, then deleted."
 msgstr ""
 
-#: orfeuscribe/window.py:1271
+#: orfeuscribe/window.py:1272
 msgid "The history will be kept until you delete it."
 msgstr ""
 
-#: orfeuscribe/window.py:1273
+#: orfeuscribe/window.py:1274
 msgid "Apply history retention?"
 msgstr ""
 
-#: orfeuscribe/window.py:1274
+#: orfeuscribe/window.py:1275
 #, python-brace-format
 msgid "Entries older than {days} day will be deleted now and from then on, with their audio."
 msgid_plural "Entries older than {days} days will be deleted now and from then on, with their audio."
 msgstr[0] ""
 msgstr[1] ""
 
-#: orfeuscribe/window.py:1279
+#: orfeuscribe/window.py:1280
 msgid "Delete Older Entries"
 msgstr ""
 
-#: orfeuscribe/window.py:1291
+#: orfeuscribe/window.py:1292
 #, python-brace-format
 msgid "{count} old entry deleted."
 msgid_plural "{count} old entries deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: orfeuscribe/window.py:1294
+#: orfeuscribe/window.py:1295
 msgid "Could not apply the retention."
 msgstr ""
 
-#: orfeuscribe/window.py:1305
+#: orfeuscribe/window.py:1306
 msgid "Notes Folder"
 msgstr ""
 
-#: orfeuscribe/window.py:1306
+#: orfeuscribe/window.py:1307
 msgid "Optional. When a folder is set, dictations that start with “note:” are appended to a daily Markdown file there instead of being pasted."
 msgstr ""
 
-#: orfeuscribe/window.py:1309
+#: orfeuscribe/window.py:1310
 msgid "Folder"
 msgstr ""
 
-#: orfeuscribe/window.py:1312
+#: orfeuscribe/window.py:1313
 msgid "Turn off"
 msgstr ""
 
-#: orfeuscribe/window.py:1314
+#: orfeuscribe/window.py:1315
 msgid "Allowed subfolders, separated by semicolons"
 msgstr ""
 
-#: orfeuscribe/window.py:1318
+#: orfeuscribe/window.py:1319
 msgid "Link vocabulary terms"
 msgstr ""
 
-#: orfeuscribe/window.py:1319
+#: orfeuscribe/window.py:1320
 msgid "Wraps terms that already have a page in the folder in [[wiki links]]."
 msgstr ""
 
-#: orfeuscribe/window.py:1326
+#: orfeuscribe/window.py:1327
 msgid "Off"
 msgstr ""
 
-#: orfeuscribe/window.py:1329
+#: orfeuscribe/window.py:1330
 msgid "Choose a Notes Folder"
 msgstr ""
 
-#: orfeuscribe/window.py:1348
+#: orfeuscribe/window.py:1349
 msgid "Use folder names without slashes, line breaks or “..”."
 msgstr ""
 
-#: orfeuscribe/window.py:1351
+#: orfeuscribe/window.py:1352
 msgid "Subfolders saved."
 msgstr ""
 
-#: orfeuscribe/window.py:1354
+#: orfeuscribe/window.py:1355
 msgid "Startup"
 msgstr ""
 
-#: orfeuscribe/window.py:1355
+#: orfeuscribe/window.py:1356
 msgid "Start at login"
 msgstr ""
 
-#: orfeuscribe/window.py:1356
+#: orfeuscribe/window.py:1357
 msgid "The extension also starts Orfeu Scribe in the background when GNOME starts."
 msgstr ""
 
-#: orfeuscribe/window.py:1383
+#: orfeuscribe/window.py:1384
 #, python-brace-format
 msgid "part {number}"
 msgstr ""
 
-#: orfeuscribe/window.py:1390
+#: orfeuscribe/window.py:1391
 msgid "Paused"
 msgstr ""
 
-#: orfeuscribe/window.py:1393
+#: orfeuscribe/window.py:1394
 msgid "automatic"
 msgstr ""
 
-#: orfeuscribe/window.py:1393
+#: orfeuscribe/window.py:1394
 msgid "fixed"
 msgstr ""
 
-#: orfeuscribe/window.py:1398
+#: orfeuscribe/window.py:1399
 msgid "Finish dictation"
 msgstr ""
 
-#: orfeuscribe/window.py:1398
+#: orfeuscribe/window.py:1399
 msgid "Start dictation"
-msgstr ""
-
-#: orfeuscribe/window.py:1424
-#, python-brace-format
-msgid "transcription {value}"
 msgstr ""
 
 #: orfeuscribe/window.py:1425
 #, python-brace-format
+msgid "transcription {value}"
+msgstr ""
+
+#: orfeuscribe/window.py:1426
+#, python-brace-format
 msgid "revision {value}"
 msgstr ""
 
-#: orfeuscribe/window.py:1436
+#: orfeuscribe/window.py:1437
 msgid "Active. Shortcuts and pasting work in any app."
 msgstr ""
 
-#: orfeuscribe/window.py:1438
+#: orfeuscribe/window.py:1439
 msgid "Installed but not enabled. Enable it in the Extensions app."
 msgstr ""
 
-#: orfeuscribe/window.py:1440
+#: orfeuscribe/window.py:1441
 msgid "Not installed. Without it, dictate here and copy the result."
 msgstr ""
 
-#: orfeuscribe/window.py:1442
+#: orfeuscribe/window.py:1443
 msgid "Needs a GNOME session to paste text at the cursor."
 msgstr ""
 

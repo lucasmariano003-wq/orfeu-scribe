@@ -240,6 +240,56 @@ class ExchangeTests(Base):
                         self.assertEqual(actual[key], expected[key], key)
                 self.assertIsNone(actual["audio_path"])
 
+    def test_long_multiline_unicode_entries_survive_both_formats(self):
+        # Longer than the csv module's default field limit (131,072 characters).
+        long_text = ("Zephyrine, «café» — naïve 🎙️ 中文\nsecond line\r\nthird\rfourth\t\"quoted\"; " * 2000)
+        self.assertGreater(len(long_text), 131072)
+        ident = self.add(long_text, raw="'" + long_text, mode="outline")
+        self.history.amend(ident, "-" + long_text + "\n")
+        self.add("A short one.")
+        rows = {row["id"]: row for row in self.history.search()}
+        for suffix in (".csv", ".md"):
+            with self.subTest(suffix=suffix):
+                path = self.root / ("long" + suffix)
+                self.assertEqual(export_history(self.history, path), 2)
+                other = History(self.root / ("long" + suffix + ".db"))
+                self.assertEqual(import_history(other, path), 2)
+                imported = sorted(other.search(), key=lambda row: row["created_at"])
+                for expected, actual in zip(sorted(rows.values(), key=lambda row: row["created_at"]), imported):
+                    for key in ("raw", "final", "edited", "mode", "created_at"):
+                        self.assertEqual(actual[key], expected[key], key)
+
+    def test_parser_errors_become_safe_messages(self):
+        from orfeuscribe import exchange
+        self.add("x" * 50)
+        path = self.root / "export.csv"
+        export_history(self.history, path)
+        with patch.object(exchange, "FIELD_LIMIT", 10):
+            with self.assertRaises(exchange.CopyError) as caught:
+                import_history(self.history, path)
+        self.assertNotIn("field limit", str(caught.exception))
+        broken = self.root / "broken.csv"
+        broken.write_text(path.read_text().splitlines()[0] + "\n1,not-a-date\n")
+        with self.assertRaises(exchange.CopyError):
+            import_history(self.history, broken)
+        self.assertEqual(len(self.history.search()), 1, "nothing was added")
+        import csv
+        self.assertEqual(csv.field_size_limit(), 131072, "the process-wide limit is restored")
+
+    def test_command_line_reports_a_damaged_copy_without_a_traceback(self):
+        import subprocess
+        import sys
+        from orfeuscribe.exchange import FIELDS, VERSION_FIELD
+        broken = self.root / "broken.csv"
+        # The right header, then a truncated row (as after an interrupted copy).
+        broken.write_text(",".join((VERSION_FIELD, *FIELDS)) + "\n1,\"unterminated\n", encoding="utf-8")
+        run = subprocess.run([sys.executable, "-m", "orfeuscribe", "--import", str(broken), "--history",
+                              str(self.root / "cli.db")], capture_output=True, text=True, timeout=60,
+                             cwd=Path(__file__).resolve().parent.parent)
+        self.assertEqual(run.returncode, 1)
+        self.assertNotIn("Traceback", run.stderr)
+        self.assertIn("The copy is damaged or was not exported by Orfeu Scribe.", run.stderr)
+
     def test_invalid_entry_rolls_back_everything(self):
         self.add()
         path = self.root / "broken.md"
