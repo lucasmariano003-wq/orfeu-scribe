@@ -279,7 +279,7 @@ msgstr ""
 msgid "“New scene”, “hard cut” and “on screen” become structure, in spoken order."
 msgstr ""
 
-#: orfeuscribe/modes.py:24 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:386
+#: orfeuscribe/modes.py:24 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:387
 msgid "Question"
 msgstr ""
 
@@ -295,7 +295,7 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: orfeuscribe/modes.py:25 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:388
+#: orfeuscribe/modes.py:25 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:389
 msgid "Draft"
 msgstr ""
 
@@ -540,7 +540,7 @@ msgstr ""
 msgid "With a selection: “make it shorter”. Without: “write a…”."
 msgstr ""
 
-#: orfeuscribe/window.py:27 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:389
+#: orfeuscribe/window.py:27 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:390
 msgid "Reply with context"
 msgstr ""
 
@@ -568,7 +568,7 @@ msgstr ""
 msgid "Ready"
 msgstr ""
 
-#: orfeuscribe/window.py:31 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:99 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:526 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:642
+#: orfeuscribe/window.py:31 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:99 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:527 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:643
 msgid "Listening…"
 msgstr ""
 
@@ -580,11 +580,11 @@ msgstr ""
 msgid "Revising…"
 msgstr ""
 
-#: orfeuscribe/window.py:32 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:526
+#: orfeuscribe/window.py:32 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:527
 msgid "Done"
 msgstr ""
 
-#: orfeuscribe/window.py:32 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:527
+#: orfeuscribe/window.py:32 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:528
 msgid "Something went wrong"
 msgstr ""
 
@@ -737,7 +737,7 @@ msgstr ""
 msgid "Last Result"
 msgstr ""
 
-#: orfeuscribe/window.py:245 orfeuscribe/window.py:376 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:446
+#: orfeuscribe/window.py:245 orfeuscribe/window.py:376 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:447
 msgid "Copy"
 msgstr ""
 
@@ -1644,106 +1644,110 @@ msgstr ""
 msgid "Orfeu Scribe service unavailable"
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:232
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:233
 msgid "Orfeu Scribe is not installed. Run its install.sh."
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:261
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:262
 msgid "Orfeu Scribe is starting. Try again."
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:268
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:269
 msgid "Orfeu Scribe service unavailable. Open Orfeu Scribe."
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:385
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:386
 msgid "Translation · %s"
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:387
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:388
 msgid "Edit · “%s”"
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:391
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:392
 msgid "listening…"
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:391
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:392
 msgid "done"
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:391
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:392
 msgid "working…"
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:398
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:399
 msgid "Terminal: the selection cannot be edited."
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:404
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:405
 msgid "The selection changed. The text was kept."
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:430
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:431
 msgid "Answer"
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:445
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:446
 msgid "Close"
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:447
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:448
 msgid "Insert at Cursor"
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:472
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:473
 msgid "Translate into: %s"
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:480
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:481
 msgid "Mode: %s"
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:527
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:528
 msgid "Working…"
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:654
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:655
 msgid "The audio is in History, under Waiting for Recovery."
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:663
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:673
 msgid "Wait for the current paste to finish."
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:668
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:678
 msgid "Text saved to history. The focused app changed."
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:711
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:726
 msgid "Could not preserve the clipboard. Text saved to history."
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:777
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:815
 msgid "Nothing to revert right now."
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:786
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:825
 msgid "Terminal: the transcript was copied. Delete and paste."
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:787 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:812
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:826 extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:857
 msgid "The focus changed: the transcript was copied."
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:792
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:831
 msgid "You typed after the paste: the transcript was copied."
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:798
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:843
 msgid "Keys still held: the transcript was copied."
 msgstr ""
 
-#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:818
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:865
 msgid "Reverted to transcript."
+msgstr ""
+
+#: extension/orfeuscribe@lucasmariano003-wq.github.io/extension.js:869
+msgid "Could not paste the transcript: it was copied."
 msgstr ""

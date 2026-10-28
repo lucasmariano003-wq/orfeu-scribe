@@ -60,7 +60,7 @@ def main(argv):
         command = [sys.executable, "-m", "unittest"] + (argv or ["discover", "-s", "tests", "-t", "."])
         status = subprocess.run(command, cwd=ROOT, env=env).returncode
         if not argv and shutil.which("gjs"):
-            for script in ("tests/test_release.js",):
+            for script in ("tests/test_release.js", "tests/test_extension_delivery.js"):
                 result = subprocess.run(["gjs", "-m", script], cwd=ROOT, env=env, capture_output=True, text=True)
                 print(result.stdout.strip() or result.stderr.strip())
                 status = status or result.returncode

@@ -175,6 +175,7 @@ export default class OrfeuScribeExtension extends Extension {
                     this._deliverySerial = (this._deliverySerial ?? 0) + 1;
                     this._target = null;
                     this._revertOffer = null;
+                    this._queuedDeliveries = [];
                     this._restoreClipboard();
                 }),
                 proxy.connectSignal('Revertible', (_p, _sender, [data]) => {
@@ -655,17 +656,27 @@ export default class OrfeuScribeExtension extends Extension {
         });
     }
 
-    _deliver(text, pasted = null) {
-        if (!text || Main.sessionMode.isLocked)
+    // `pasted(target)` runs once Ctrl+V has been sent to the target; `failed()` runs
+    // when the text was not pasted. While "Revert to transcript" is replacing the
+    // last paste, other deliveries wait for it (`exclusive` is the revert's own).
+    _deliver(text, pasted = null, failed = null, exclusive = false) {
+        if (this._reverting && !exclusive) {
+            (this._queuedDeliveries ??= []).push([text, pasted, failed]);
             return;
+        }
+        if (!text || Main.sessionMode.isLocked) {
+            failed?.();
+            return;
+        }
         // A new delivery ends the revert offer of the previous one.
         this._clearRevert(false);
-        if (this._clipboardSnapshot) { this._error(_('Wait for the current paste to finish.')); return; }
+        if (this._clipboardSnapshot) { this._error(_('Wait for the current paste to finish.')); failed?.(); return; }
         const deliverySerial = this._deliverySerial ?? 0;
         const valid = () => deliverySerial === (this._deliverySerial ?? 0);
         const target = this._target;
         if (!target || target !== global.display.focus_window) {
             this._error(_('Text saved to history. The focused app changed.'));
+            failed?.();
             return;
         }
         const type = St.ClipboardType.CLIPBOARD;
@@ -673,13 +684,16 @@ export default class OrfeuScribeExtension extends Extension {
         const mime = mimes.find(m => m === 'image/png') ?? mimes.find(m => m === 'text/plain;charset=utf-8') ??
             mimes.find(m => m.startsWith('text/plain')) ?? mimes[0];
         const paste = (bytes = null, previousText = null) => {
-            if (!valid() || !this._alive || target !== global.display.focus_window || Main.sessionMode.isLocked)
+            if (!valid() || !this._alive || target !== global.display.focus_window || Main.sessionMode.isLocked) {
+                failed?.();
                 return;
+            }
             this._clipboardSnapshot = {mime, bytes, text, previousText};
             this._clipboard.set_text(type, text);
             this._later(70, () => {
                 if (!valid() || target !== global.display.focus_window || Main.sessionMode.isLocked) {
                     this._restoreClipboard();
+                    failed?.();
                     return;
                 }
                 const terminal = TERMINAL.test(target.get_wm_class() ?? '');
@@ -690,6 +704,7 @@ export default class OrfeuScribeExtension extends Extension {
                     if (!valid() || target !== global.display.focus_window || Main.sessionMode.isLocked) {
                         for (const key of modifiers) this._key(key, false);
                         this._restoreClipboard();
+                        failed?.();
                         return;
                     }
                     this._key(Clutter.KEY_v, true);
@@ -709,6 +724,7 @@ export default class OrfeuScribeExtension extends Extension {
             this._clipboard.get_content(type, mime, (_clipboard, bytes) => {
                 if (!bytes) {
                     this._error(_('Could not preserve the clipboard. Text saved to history.'));
+                    failed?.();
                     return;
                 }
                 // The callback's GBytes is borrowed; restoring needs its own copy.
@@ -716,6 +732,28 @@ export default class OrfeuScribeExtension extends Extension {
             });
         else
             paste();
+    }
+
+    _flushDeliveries() {
+        const next = this._queuedDeliveries?.shift();
+        if (!next || !this._alive)
+            return;
+        const [text, pasted, failed] = next;
+        // One at a time: the next waits for this paste's clipboard restore.
+        const after = () => this._later(450, () => this._flushDeliveries());
+        this._deliver(text, target => { pasted?.(target); after(); }, () => { failed?.(); after(); });
+    }
+
+    _endRevert(revert) {
+        if (this._reverting !== revert)
+            return;
+        // Deliveries that arrived meanwhile go after the transcript's clipboard restore.
+        this._later(450, () => {
+            if (this._reverting !== revert)
+                return;
+            this._reverting = null;
+            this._flushDeliveries();
+        });
     }
 
     _notice(message) {
@@ -782,6 +820,7 @@ export default class OrfeuScribeExtension extends Extension {
             this._clearRevert(false);
             this._clipboard.set_text(St.ClipboardType.CLIPBOARD, revert.raw);
             this._notice(message);
+            this._endRevert(revert);
         };
         if (revert.terminal) { copy(_('Terminal: the transcript was copied. Delete and paste.')); return; }
         if (global.display.focus_window !== revert.target) { copy(_('The focus changed: the transcript was copied.')); return; }
@@ -791,6 +830,12 @@ export default class OrfeuScribeExtension extends Extension {
         if (attempt === 0 && revert.keyboardAt && (source !== 'shortcut' || typedFor > RAW_CHORD_US)) {
             copy(_('You typed after the paste: the transcript was copied.'));
             return;
+        }
+        // From the request on, the revert is one exclusive operation: a part arriving now
+        // must not be pasted between the paste being undone and the transcript.
+        if (this._reverting !== revert) {
+            this._reverting = revert;
+            this._later(3000, () => this._endRevert(revert));
         }
         // The previous paste is still restoring the clipboard, or the shortcut's
         // modifiers are still held: wait a little, at most 1.5 s.
@@ -810,12 +855,20 @@ export default class OrfeuScribeExtension extends Extension {
                     if (global.display.focus_window !== revert.target || Main.sessionMode.isLocked) {
                         this._clipboard.set_text(St.ClipboardType.CLIPBOARD, revert.raw);
                         this._notice(_('The focus changed: the transcript was copied.'));
+                        this._endRevert(revert);
                         return;
                     }
                     this._target = revert.target;
-                    this._deliver(revert.raw);
-                    this._proxy?.RevertToRawRemote(revert.id, () => {});
-                    this._notice(_('Reverted to transcript.'));
+                    // Success is announced and recorded only once the transcript was pasted.
+                    this._deliver(revert.raw, () => {
+                        this._proxy?.RevertToRawRemote(revert.id, () => {});
+                        this._notice(_('Reverted to transcript.'));
+                        this._endRevert(revert);
+                    }, () => {
+                        this._clipboard.set_text(St.ClipboardType.CLIPBOARD, revert.raw);
+                        this._notice(_('Could not paste the transcript: it was copied.'));
+                        this._endRevert(revert);
+                    }, true);
                 });
             });
         });
@@ -864,7 +917,8 @@ export default class OrfeuScribeExtension extends Extension {
             Main.wm.removeKeybinding(key);
         this._selectionOwner.disconnect(this._primaryId);
         this._primaryWindow = this._selectionOwner = null;
-        this._revert = this._revertOffer = null;
+        this._revert = this._revertOffer = this._reverting = null;
+        this._queuedDeliveries = [];
         this._restoreClipboard();
         for (const id of this._timers)
             GLib.source_remove(id);
