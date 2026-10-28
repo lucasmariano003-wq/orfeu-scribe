@@ -33,6 +33,7 @@ All identifiers live in `orfeuscribe/ids.py`:
 | GSettings schema | `org.gnome.shell.extensions.orfeuscribe` (shared by app and extension) |
 | Config / data | `~/.config/orfeuscribe/`, `~/.local/share/orfeuscribe/` |
 | Keyring schema | `io.github.lucasmariano003_wq.OrfeuScribe.ApiKey` (attribute `slot` = `stt` or `revision`) |
+| Key ↔ server link | `stt_credential_server` / `revision_credential_server` in `settings.json` (an address, never a key) |
 
 ## Python modules
 
@@ -43,7 +44,7 @@ All identifiers live in `orfeuscribe/ids.py`:
 | `pipeline.py` | Transcribe → commands → route → revise (guarded) → result; no GTK |
 | `providers/__init__.py` | `Transcriber`/`Reviser` contracts, `Service`, `build()` from settings |
 | `providers/openai_compat.py` | HTTP client (no redirects, no response bodies in errors), adapters |
-| `credentials.py` | Keyring (libsecret) or environment variables; memory store for tests |
+| `credentials.py` | Keyring (libsecret) or environment variables; a saved key goes only to the server it was saved for (`bound_key`); memory store for tests |
 | `text.py` | Mode choice and the messages sent for revision (English instructions) |
 | `commands.py` | Spoken commands and structure markers per language |
 | `guard.py`, `learning.py` | Foreign-text guard; style examples and spelling suggestions |

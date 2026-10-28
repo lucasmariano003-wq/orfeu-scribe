@@ -43,7 +43,8 @@ class EndToEndTests(unittest.TestCase):
     def configured_app(self, revision=True):
         app = make_app(self, provider=None, input_language="en")
         app.config.update(stt_base_url=self.server.url, stt_model="fake-transcribe",
-                          revision_model="fake-chat" if revision else "", understand_intent=False)
+                          revision_model="fake-chat" if revision else "", understand_intent=False,
+                          stt_credential_server=self.server.url)
         app.credentials = MemoryStore({"stt": KEY})
         app.provider = providers.build(app.config, app.credentials)
         recorder = Recorder(app.level, app.fail, app.meter)

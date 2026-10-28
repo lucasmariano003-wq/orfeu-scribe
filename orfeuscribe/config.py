@@ -33,6 +33,9 @@ DEFAULTS = {
     "stt_base_url": "", "stt_model": "", "stt_hints": "auto",
     # Text revision service (OpenAI-compatible /chat/completions).
     "revision_enabled": True, "revision_same_server": True, "revision_base_url": "", "revision_model": "",
+    # The server each saved API key belongs to (an address, never the key). A key
+    # is only sent to that server; "" means the key is not linked to any server yet.
+    "stt_credential_server": "", "revision_credential_server": "",
     "understand_intent": True,
     # Opt-in features that send more data or cost more calls: off by default.
     "learn_from_history": False, "reply_context": False, "live_text": False,
@@ -48,7 +51,11 @@ DEFAULTS = {
 }
 BOOLEANS = ("revision_enabled", "revision_same_server", "understand_intent", "learn_from_history",
             "reply_context", "live_text", "sounds", "silence_stop", "pause_delivery", "notes_wikilinks", "autostart")
-STRINGS = ("stt_base_url", "stt_model", "revision_base_url", "revision_model", "microphone", "notes_folder")
+STRINGS = ("stt_base_url", "stt_model", "revision_base_url", "revision_model", "microphone", "notes_folder",
+           "stt_credential_server", "revision_credential_server")
+# Key slot → (setting with the server the key belongs to, setting with the server URL).
+CREDENTIAL_SERVERS = {"stt": ("stt_credential_server", "stt_base_url"),
+                      "revision": ("revision_credential_server", "revision_base_url")}
 
 
 def private_dir(path: Path) -> Path:
@@ -84,17 +91,50 @@ def valid_endpoint(url: str) -> bool:
     return parts.scheme == "http" and parts.hostname in ("127.0.0.1", "localhost", "::1")
 
 
+def endpoint_identity(url: str) -> str:
+    """The server an address designates, in one spelling; "" for an empty or invalid address.
+
+    Scheme and host are case-insensitive, the default port and a trailing slash do
+    not matter; the path does (two paths can be two services on the same host).
+    """
+    if not url or not valid_endpoint(url):
+        return ""
+    from urllib import parse
+    parts = parse.urlsplit(url.strip())
+    scheme, host = parts.scheme.lower(), parts.hostname.lower()
+    try:
+        port = parts.port
+    except ValueError:
+        return ""
+    if ":" in host:
+        host = f"[{host}]"
+    if port and port != {"https": 443, "http": 80}[scheme]:
+        host = f"{host}:{port}"
+    return f"{scheme}://{host}{parts.path.rstrip('/')}"
+
+
 class Config:
     def __init__(self, directory: Path = CONFIG_DIR):
         self.directory = directory
         self.path = directory / "settings.json"
         self.data = copy.deepcopy(DEFAULTS)
+        stored = None
         try:
             stored = json.loads(self.path.read_text(encoding="utf-8"))
             self.data.update({k: v for k, v in stored.items() if k in DEFAULTS})
         except (FileNotFoundError, ValueError, AttributeError):
-            pass
+            stored = None
         self._validate()
+        if isinstance(stored, dict) and any(binding not in stored for binding, _url in CREDENTIAL_SERVERS.values()):
+            # Settings written before keys were linked to a server: until now the saved key
+            # was being sent to the configured URL, so it stays linked to that URL only.
+            for binding, url in CREDENTIAL_SERVERS.values():
+                if binding not in stored:
+                    self.data[binding] = endpoint_identity(self.data[url])
+            try:
+                self.save()
+            except OSError:
+                pass
 
     def _validate(self):
         data = self.data
@@ -107,6 +147,8 @@ class Config:
         for key in ("stt_base_url", "revision_base_url"):
             if data[key] and not valid_endpoint(data[key]):
                 data[key] = ""
+        for binding, _url in CREDENTIAL_SERVERS.values():
+            data[binding] = endpoint_identity(data[binding])
         if data["stt_hints"] not in HINTS:
             data["stt_hints"] = "auto"
         if not isinstance(data["rules"], list):

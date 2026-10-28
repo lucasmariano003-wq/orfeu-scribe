@@ -99,6 +99,14 @@ histórico e vocabulário; `./uninstall.sh --purge` remove também esses dados.
 As chaves também podem vir do ambiente: `ORFEUSCRIBE_STT_API_KEY` e
 `ORFEUSCRIBE_REVISION_API_KEY` têm precedência sobre o chaveiro.
 
+Uma chave guardada no chaveiro pertence à URL de servidor exibida quando você a
+salvou e só é enviada a esse servidor. Se depois você mudar a URL, o Orfeu
+Scribe pergunta antes de mandar a chave guardada ao novo endereço (*Usar a
+Chave Aqui*); senão, os pedidos ao novo servidor vão sem chave até você informar
+a dele. Configurações de versões anteriores mantêm a chave para a URL que já
+tinham. Chaves vindas de variáveis de ambiente são escolha explícita sua para
+aquele processo e vão ao servidor configurado.
+
 ## Configurar um serviço
 
 | Configuração | OpenAI | Servidor local (exemplo) |

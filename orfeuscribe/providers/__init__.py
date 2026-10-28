@@ -105,20 +105,29 @@ class Service:
         return self._revise("ask", question, context, vocab)
 
 
+def key_for(config, store, slot, endpoint):
+    """Looks the key up at request time, and only for the server it was saved for."""
+    from ..config import CREDENTIAL_SERVERS
+    from ..credentials import bound_key
+    linked = CREDENTIAL_SERVERS[slot][0]
+    return lambda: bound_key(store, slot, endpoint, lambda: config.get(linked, ""))
+
+
 def build(config, store=None, prompt_observer=None) -> Service:
     """A Service from the settings. Keys are looked up at request time, never stored here."""
-    from ..credentials import api_key, default_store
+    from ..credentials import default_store
     from .openai_compat import OpenAIReviser, OpenAITranscriber
     store = store if store is not None else default_store()
     if not config.stt_configured:
         return Service(Unconfigured())
     transcriber = OpenAITranscriber(config["stt_base_url"], config["stt_model"],
-                                    key=lambda: api_key(store, "stt"), hints=config["stt_hints"])
+                                    key=key_for(config, store, "stt", config["stt_base_url"]),
+                                    hints=config["stt_hints"])
     reviser = None
     if config.revision_configured:
         same = config["revision_same_server"]
         base = config["stt_base_url"] if same else config["revision_base_url"]
         slot = "stt" if same else "revision"
-        reviser = OpenAIReviser(base, config["revision_model"], key=lambda: api_key(store, slot),
+        reviser = OpenAIReviser(base, config["revision_model"], key=key_for(config, store, slot, base),
                                 prompt_observer=prompt_observer)
     return Service(transcriber, reviser)

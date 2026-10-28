@@ -197,7 +197,8 @@ class BuildTests(unittest.TestCase):
         self.config.update(stt_base_url="https://stt.example/v1", stt_model="gpt-transcribe")
         service = providers.build(self.config, MemoryStore())
         self.assertIsNone(service.reviser, "no revision model yet")
-        self.config.update(revision_model="chat-model")
+        self.config.update(revision_model="chat-model", stt_credential_server="https://stt.example/v1",
+                           revision_credential_server="https://llm.example/v1")
         store = MemoryStore({"stt": "stt-key", "revision": "revision-key"})
         service = providers.build(self.config, store)
         self.assertEqual(service.reviser.client.base, "https://stt.example/v1")
@@ -208,6 +209,62 @@ class BuildTests(unittest.TestCase):
                          ("https://llm.example/v1", "revision-key"))
         self.config.update(revision_enabled=False)
         self.assertFalse(providers.build(self.config, store).can_revise)
+
+    def servers(self, count):
+        servers = [serve() for _ in range(count)]
+        for server in servers:
+            self.addCleanup(server.close)
+        return servers
+
+    def test_changing_the_server_never_forwards_the_previous_key(self):
+        old, new = self.servers(2)
+        store = MemoryStore({"stt": "SYNTHETIC-OLD-PROVIDER-KEY"})
+        self.config.update(stt_base_url=old.url, stt_model="m", stt_credential_server=old.url)
+        providers.build(self.config, store).transcriber.list_models()
+        self.assertEqual(old.state.authorizations, ["Bearer SYNTHETIC-OLD-PROVIDER-KEY"])
+        # The user points the speech service at another server and lists its models.
+        self.config.update(stt_base_url=new.url)
+        providers.build(self.config, store).transcriber.list_models()
+        self.assertEqual(new.state.authorizations, [None], "the old key never reaches the new server")
+        # Only an explicit link (the window asks first) sends it there.
+        self.config.update(stt_credential_server=new.url)
+        providers.build(self.config, store).transcriber.list_models()
+        self.assertEqual(new.state.authorizations[-1], "Bearer SYNTHETIC-OLD-PROVIDER-KEY")
+
+    def test_request_under_way_never_takes_a_key_saved_for_another_server(self):
+        old, new = self.servers(2)
+        store = MemoryStore({"stt": "SYNTHETIC-OLD-PROVIDER-KEY"})
+        self.config.update(stt_base_url=old.url, stt_model="m", stt_credential_server=old.url)
+        in_flight = providers.build(self.config, store)
+        # The window saves the new provider's key: unlink, store, link to the new server.
+        self.config.update(stt_base_url=new.url, stt_credential_server="")
+        store.store("stt", "SYNTHETIC-NEW-PROVIDER-KEY")
+        self.config.update(stt_credential_server=new.url)
+        in_flight.transcriber.list_models()
+        providers.build(self.config, store).transcriber.list_models()
+        self.assertEqual(old.state.authorizations, [None], "the old client sends no key at all")
+        self.assertEqual(new.state.authorizations, ["Bearer SYNTHETIC-NEW-PROVIDER-KEY"])
+
+    def test_key_read_while_the_link_changes_is_dropped(self):
+        from orfeuscribe.credentials import bound_key
+        links = iter(["https://a.example/v1", "https://b.example/v1"])
+        self.assertIsNone(bound_key(MemoryStore({"stt": "k"}), "stt", "https://a.example/v1", lambda: next(links)))
+        self.assertEqual(bound_key(MemoryStore({"stt": "k"}), "stt", "https://A.example:443/v1/",
+                                   lambda: "https://a.example/v1"), "k")
+        self.assertIsNone(bound_key(MemoryStore({"stt": "k"}), "stt", "https://a.example/v2",
+                                   lambda: "https://a.example/v1"), "another path is another service")
+
+    def test_settings_saved_before_links_keep_their_key_for_that_server_only(self):
+        self.config.path.write_text(json.dumps({"stt_base_url": "https://stt.example/v1/", "stt_model": "m",
+                                                "revision_base_url": "https://llm.example/v1"}))
+        config = Config(self.config.directory)
+        self.assertEqual((config["stt_credential_server"], config["revision_credential_server"]),
+                         ("https://stt.example/v1", "https://llm.example/v1"))
+        self.assertEqual(json.loads(config.path.read_text())["stt_credential_server"], "https://stt.example/v1")
+        store = MemoryStore({"stt": "legacy-key"})
+        self.assertEqual(providers.build(config, store).transcriber.client._key(), "legacy-key")
+        fresh = Config(self.config.directory / "fresh")
+        self.assertEqual(fresh["stt_credential_server"], "", "a new install links nothing")
 
     def test_environment_key_wins_and_is_read_at_request_time(self):
         store = MemoryStore({"stt": "from-store"})

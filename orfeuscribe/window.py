@@ -11,7 +11,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk, Pango
 
 from . import __version__, languages as langs, modes as modes_module
-from .config import ROOT, valid_endpoint, valid_pattern, write_private
+from .config import CREDENTIAL_SERVERS, ROOT, endpoint_identity, valid_endpoint, valid_pattern, write_private
 from .history import History
 from .i18n import N_, _, ngettext
 from .ids import APP_ID, APP_NAME, EXTENSION_UUID
@@ -768,9 +768,63 @@ class OrfeuScribeWindow(Adw.ApplicationWindow):
         if text and not valid_endpoint(text):
             self.toast(_("Use an https:// address (http:// only for this computer), without user, query or fragment."))
             return
+        slot = "stt" if key == "stt_base_url" else "revision"
+        linked_key = CREDENTIAL_SERVERS[slot][0]
+        linked, server = self.app.config[linked_key], endpoint_identity(text)
         self.app.config[key] = text.rstrip("/")
+        if server and not linked:
+            # A key saved before any server was set belongs to the first one chosen.
+            self.app.config[linked_key] = server
         self.app.reload_provider()
         self.toast(_("Server saved."))
+        if server and linked and linked != server:
+            # The saved key belongs to another server: it is not sent here unless the user says so.
+            self._confirm_key_reuse(slot, linked, server)
+        self._key_status(slot)
+
+    def _confirm_key_reuse(self, slot, linked, server):
+        from .credentials import from_environment
+        if from_environment(slot):
+            return
+
+        def work():
+            try:
+                found = bool(self.app.credentials.lookup(slot))
+            except Exception:  # noqa: BLE001 — a locked keyring: nothing to reuse right now
+                found = None
+            GLib.idle_add(self._ask_key_reuse, slot, linked, server, found)
+        threading.Thread(target=work, daemon=True).start()
+
+    def _ask_key_reuse(self, slot, linked, server, found):
+        linked_key = CREDENTIAL_SERVERS[slot][0]
+        if self.app.config[linked_key] != linked or endpoint_identity(
+                self.app.config[CREDENTIAL_SERVERS[slot][1]]) != server:
+            return GLib.SOURCE_REMOVE  # Something changed meanwhile: decide again on the next save.
+        if found is False:
+            # No key is saved: there is nothing to forward, the slot simply follows the new server.
+            self.app.config[linked_key] = server
+            self._key_status(slot)
+            return GLib.SOURCE_REMOVE
+        if found is None:
+            return GLib.SOURCE_REMOVE
+        dialog = Adw.AlertDialog(heading=_("Send the saved key to the new server?"),
+                                 body=_("The saved API key was set for {old}. Use it with {new} only if both "
+                                        "addresses belong to the same account; otherwise, enter the new server's "
+                                        "key.").format(old=linked, new=server))
+        dialog.add_response("keep", _("Don't Send"))
+        dialog.add_response("reuse", _("Use the Key Here"))
+        dialog.set_default_response("keep")
+        dialog.set_close_response("keep")
+
+        def response(_dialog, choice):
+            if choice == "reuse" and self.app.config[linked_key] == linked:
+                self.app.config[linked_key] = server
+                self.app.reload_provider()
+            self._key_status(slot)
+        dialog.connect("response", response)
+        self.last_dialog = dialog
+        dialog.present(self)
+        return GLib.SOURCE_REMOVE
 
     def _save_text(self, key, row):
         self.app.config[key] = row.get_text().strip()
@@ -782,16 +836,23 @@ class OrfeuScribeWindow(Adw.ApplicationWindow):
         if not value:
             return
         row.set_text("")
+        linked_key, url_key = CREDENTIAL_SERVERS[slot]
+        previous, server = self.app.config[linked_key], endpoint_identity(self.app.config[url_key])
+        # Unlink first: no request, even one already under way, may pair the new key
+        # with the server of the previous one while the keyring is being written.
+        self.app.config[linked_key] = ""
 
         def work():
             try:
                 self.app.credentials.store(slot, value)
-                GLib.idle_add(self._key_saved, slot, "")
+                GLib.idle_add(self._key_saved, slot, "", server)
             except Exception as exc:  # noqa: BLE001 — SecretError carries a safe message
-                GLib.idle_add(self._key_saved, slot, str(exc) or _("Could not save the key."))
+                GLib.idle_add(self._key_saved, slot, str(exc) or _("Could not save the key."), previous)
         threading.Thread(target=work, daemon=True).start()
 
-    def _key_saved(self, slot, error):
+    def _key_saved(self, slot, error, server):
+        # The key belongs to the server shown when it was saved (or, on failure, the old key keeps its server).
+        self.app.config[CREDENTIAL_SERVERS[slot][0]] = server
         self.toast(error or _("Key saved in the keyring."))
         self.app.reload_provider()
         self._key_status(slot)
@@ -800,6 +861,7 @@ class OrfeuScribeWindow(Adw.ApplicationWindow):
     def _clear_key(self, slot):
         try:
             self.app.credentials.clear(slot)
+            self.app.config[CREDENTIAL_SERVERS[slot][0]] = ""
             self.toast(_("Key removed from the keyring."))
         except Exception as exc:  # noqa: BLE001
             self.toast(str(exc))
@@ -820,6 +882,12 @@ class OrfeuScribeWindow(Adw.ApplicationWindow):
                 text = _("Saved in the keyring.") if found else _("Not set. Local servers may not need one.")
             except Exception as exc:  # noqa: BLE001 — SecretError carries a safe message
                 found, text = False, str(exc)
+            linked_key, url_key = CREDENTIAL_SERVERS[slot]
+            linked, server = self.app.config[linked_key], endpoint_identity(self.app.config[url_key])
+            if found and linked and linked != server:
+                text = _("Saved for {server}. It is not sent to the server above.").format(server=linked)
+            elif found and not linked:
+                text = _("Saved, but not linked to a server yet. Save the server URL to use it.")
 
             def show():
                 row.set_subtitle(text)

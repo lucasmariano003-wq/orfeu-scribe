@@ -110,5 +110,31 @@ def api_key(store, slot):
     return value.strip() if value else None
 
 
+def bound_key(store, slot, endpoint, linked_server):
+    """The key for a request to ``endpoint``, or None.
+
+    A saved key is sent only to the server it was saved for (``linked_server()``,
+    read from the settings at request time). Changing the server URL therefore
+    never forwards the previous provider's key, and a request already under way
+    for one server never picks up a key saved meanwhile for another: the link is
+    checked before and after reading the key, and the window unlinks the slot
+    before storing a new key. An environment variable is an explicit choice for
+    this process and is used for the configured server, as before.
+    """
+    if slot not in SLOTS:
+        raise ValueError(slot)
+    value = os.environ.get(ENVIRONMENT[slot], "").strip()
+    if value:
+        return value
+    from .config import endpoint_identity
+    target = endpoint_identity(endpoint)
+    if not target or endpoint_identity(linked_server()) != target:
+        return None
+    value = store.lookup(slot) if store else None
+    if endpoint_identity(linked_server()) != target:
+        return None
+    return value.strip() if value else None
+
+
 def from_environment(slot) -> bool:
     return bool(os.environ.get(ENVIRONMENT[slot], "").strip())

@@ -103,6 +103,14 @@ history and vocabulary; `./uninstall.sh --purge` removes those too.
 Keys can also come from the environment: `ORFEUSCRIBE_STT_API_KEY` and
 `ORFEUSCRIBE_REVISION_API_KEY` take precedence over the keyring.
 
+A key saved in the keyring belongs to the server URL shown when you saved it,
+and is sent only to that server. If you later change the URL, Orfeu Scribe
+asks before sending the saved key to the new address (*Use the Key Here*);
+otherwise requests to the new server go without a key until you enter its own.
+Settings from earlier versions keep their key for the URL they already had.
+Keys from environment variables are your explicit choice for that process and
+go to whatever server is configured.
+
 ## Configuring a service
 
 | Setting | OpenAI | Local server (example) |
