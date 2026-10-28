@@ -269,13 +269,18 @@ class History:
                 db.execute("UPDATE dictations SET audio_path=NULL WHERE id=?", (row["id"],))
 
     def delete(self, ident, created_at=None):
-        """Deletes the entry, its own audio and evidence; never follows imported paths."""
+        """Deletes the entry and everything kept for it; never follows imported paths.
+
+        That is its own audio, its suggestion evidence, the audio rescued for it
+        (rescue/, linked by history_id) and its copy inside format-update backups.
+        """
         with self.connect() as db:
             db.execute("BEGIN IMMEDIATE")
-            row = db.execute("SELECT audio_path FROM dictations WHERE id=? AND (? IS NULL OR created_at=?)",
+            row = db.execute("SELECT audio_path, created_at FROM dictations WHERE id=? AND (? IS NULL OR created_at=?)",
                              (ident, created_at, created_at)).fetchone()
             if row is None:
                 return False
+            created_at = row['created_at']
             if row['audio_path']:
                 path = Path(row['audio_path'])
                 expected = self.path.parent / 'audio' / f'dictation-{ident}.wav'
@@ -285,7 +290,24 @@ class History:
             db.execute("DELETE FROM dictations WHERE id=?", (ident,))
             db.execute("UPDATE suggestions SET count=(SELECT count(*) FROM suggestion_evidence WHERE suggestion_id=suggestions.id)")
             db.execute("DELETE FROM suggestions WHERE count=0 AND status='pending'")
+        from .rescue import RescueStore
+        try:
+            RescueStore(self.path.parent / "rescue").remove_linked(ident)
+        except OSError:
+            pass  # Rescues expire after 24 hours in any case.
+        self._erase_from_backups(ident, created_at)
         return True
+
+    def _erase_from_backups(self, ident, created_at):
+        """A deleted entry leaves the format-update copies too (matched by id and time, ids can be reused)."""
+        for _stamp, path in self.backups():
+            try:
+                with closing(sqlite3.connect(path, timeout=10)) as db:
+                    db.execute("PRAGMA secure_delete=ON")
+                    with db:
+                        db.execute("DELETE FROM dictations WHERE id=? AND created_at=?", (ident, created_at))
+            except sqlite3.Error:
+                continue  # Still deleted with the whole copy when it expires.
 
     def prune_days(self, days, now=None):
         if days <= 0:

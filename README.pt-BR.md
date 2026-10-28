@@ -148,7 +148,9 @@ de revisão (duas, se a guarda precisar refazer).
   exclui também o áudio guardado para recuperá-la), uma cópia privada do
   histórico feita antes de uma atualização mudar seu formato
   (`history-before-*.db`, apagada após 30 dias, ou antes, se você guardar o
-  histórico por menos dias; as exportações que você cria nunca são apagadas),
+  histórico por menos dias; as entradas que você exclui, ou que a retenção
+  remove, são apagadas dela também; as exportações que você cria nunca são
+  apagadas),
   configurações em
   `~/.config/orfeuscribe/settings.json`, vocabulário em
   `~/.config/orfeuscribe/vocabulary.txt` e chaves de API no chaveiro.

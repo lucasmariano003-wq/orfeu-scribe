@@ -96,6 +96,8 @@ class HistoryTests(Base):
         export = self.root / "old-before-my-own-export.db"
         export.write_text("a file the user named like a copy")
         self.assertEqual(history.prune_days(1), 1)
+        self.assertNotIn(b"DELETED-SYNTHETIC-MARKER", history.last_backup.read_bytes(),
+                         "an entry removed by the retention is erased from the copy at once")
         self.assertEqual(history.prune_backups(1, now=made + timedelta(hours=12)), 0, "kept while it is recent")
         self.assertEqual(history.prune_backups(1, now=made + timedelta(days=2)), 1)
         self.assertEqual(history.backups(), [])
@@ -110,6 +112,25 @@ class HistoryTests(Base):
         self.assertEqual(history.prune_backups(0, now=made + timedelta(days=29)), 1)
         self.assertEqual((stale.exists(), recent.exists()), (False, True))
         self.assertEqual(history.prune_backups(0, now=made + timedelta(days=31)), 1)
+
+    def test_deleting_an_entry_erases_its_copies_and_rescued_audio(self):
+        path = self.root / "old.db"
+        with closing(sqlite3.connect(path)) as db:
+            db.execute(OLD_SCHEMA)
+            for ident, text in ((1, "KEEP-SYNTHETIC"), (2, "ERASE-SYNTHETIC")):
+                db.execute("INSERT INTO dictations VALUES (?,'2026-01-01T00:00:00+00:00','e','t','dictation',"
+                           "?,?,'s','m',1,1,1,3,NULL)", (ident, text, text))
+            db.commit()
+        history = History(path)
+        rescue = RescueStore(self.root / "rescue")
+        linked = rescue.save(wav(2), reason="error", history_id=2)
+        other = rescue.save(wav(2), reason="error", history_id=1)
+        self.assertTrue(history.delete(2))
+        backup = history.last_backup.read_bytes()
+        self.assertNotIn(b"ERASE-SYNTHETIC", backup)
+        self.assertIn(b"KEEP-SYNTHETIC", backup, "the copy keeps protecting the other entries")
+        self.assertIsNone(rescue.get(linked))
+        self.assertIsNotNone(rescue.get(other))
 
     def test_failed_migration_rolls_back(self):
         path = self.root / "old.db"

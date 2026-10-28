@@ -150,6 +150,7 @@ dictation (more with *Live text* or *Deliver in parts*) and one revision call
   (deleting an entry also deletes its rescued audio), a private copy of the
   history made before an update changes its format (`history-before-*.db`,
   deleted after 30 days, or sooner if you keep the history for fewer days;
+  entries you delete, or that the retention removes, are erased from it too;
   exports you create are never deleted),
   settings in `~/.config/orfeuscribe/settings.json`, vocabulary in
   `~/.config/orfeuscribe/vocabulary.txt`, API keys in the keyring.

@@ -1266,8 +1266,9 @@ class OrfeuScribeWindow(Adw.ApplicationWindow):
         group.add(rescue)
         backups = Adw.ActionRow(title=_("Copies before format updates"),
                                 subtitle=_("Before an update changes the history's format, a private copy is kept "
-                                           "next to it for 30 days (fewer if the history is kept for fewer days), "
-                                           "then deleted. Exports you create are never deleted."))
+                                           "next to it for up to 30 days (fewer if the history is kept for fewer "
+                                           "days). Entries you delete, or that the retention removes, are erased "
+                                           "from it too. Exports you create are never deleted."))
         backups.set_subtitle_lines(0)
         group.add(backups)
         return group
