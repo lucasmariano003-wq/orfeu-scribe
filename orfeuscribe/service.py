@@ -498,14 +498,20 @@ class OrfeuScribeApplication(Adw.Application):
         self.set_state("idle")
 
     def fail(self, message, rescued=None):
-        if rescued:
-            pass
-        elif self.recovering:
+        """Stops everything and keeps every piece of audio that has not become an entry.
+
+        ``rescued`` is the rescue of the part that just failed (its caller already
+        saved it and cleared ``work_audio``). It never stands for the whole session:
+        with parts, the recorder and the queue still own audio, and they are rescued
+        here, before the recorder is cancelled and the queue cleared.
+        """
+        if self.recovering and not rescued:
             # The audio is already in rescue: just record the new problem.
             self.rescue.update(self.recovering, message=message[:300])
             rescued = self.recovering
         else:
-            rescued = self._rescue_all("error", message)
+            others = self._rescue_all("error", message)
+            rescued = rescued or others
         self.work_audio = None
         self.recovering = None
         self.generation += 1
@@ -520,6 +526,11 @@ class OrfeuScribeApplication(Adw.Application):
             # Before the error: the pill can offer Recover together with the message.
             self.emit_bus("Rescued", "(s)", json.dumps({"id": rescued, "reason": "error"}))
         self.emit_bus("Error", "(s)", message)
+
+    def _optional_failure(self, message):
+        """A step after the text was saved failed: tell the user without blocking the delivery."""
+        if self.window:
+            self.window.toast(message)
 
     def _rescue_audio(self, audio, reason, message, context, mode, request, recording, history_id=None):
         store = getattr(self, "rescue", None)
@@ -686,18 +697,33 @@ class OrfeuScribeApplication(Adw.Application):
                 result.error = str(exc) if isinstance(exc, ValueError) else _("Could not add the note. The text is in the history.")
         values = result.as_dict()
         recovered, work = self.recovering, self.work_audio
-        if not segment:
-            self.recovering = self.work_audio = None
         try:
             ident = self.history.add(app=context["wm_class"], title=context["title"], **values)
-            if audio:
-                self.history.retain_audio(ident, audio, self.config["audio_keep"])
-            self.history.prune_days(self.config.get("history_days", 0))
-            self.last_record = self.history.get(ident)
-            self.last_result = result
         except (OSError, sqlite3.Error):
+            # Nothing was saved: the audio of this work (or its rescue, when recovering)
+            # is still referenced here, so fail() keeps it for Recover.
             self.fail(_("Could not save the dictation in the history. Check the free disk space."))
             return GLib.SOURCE_REMOVE
+        # The text is in the history: from here on, this work's audio is no longer needed for recovery.
+        if not segment:
+            self.recovering = self.work_audio = None
+        self.last_result = result
+        # Optional steps: keeping the audio, applying retention and reloading the entry
+        # never block the delivery of a text that is already saved.
+        if audio:
+            try:
+                self.history.retain_audio(ident, audio, self.config["audio_keep"])
+            except (OSError, sqlite3.Error):
+                self._optional_failure(_("The text was saved, but its audio could not be kept."))
+        try:
+            self.history.prune_days(self.config.get("history_days", 0))
+        except (OSError, sqlite3.Error):
+            pass  # The hourly retention tries again.
+        try:
+            self.last_record = self.history.get(ident)
+        except (OSError, sqlite3.Error):
+            self.last_record = dict(values, id=ident, app=context["wm_class"], title=context["title"],
+                                    created_at="", edited=None, edited_at=None, audio_path=None)
         if result.error:
             # The revision failed: the transcript is in the entry, and the audio goes to
             # rescue so transcription and revision can be redone.

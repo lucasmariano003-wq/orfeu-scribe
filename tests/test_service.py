@@ -1,5 +1,6 @@
 """Service behaviour with doubles: no D-Bus registration, no microphone, no real settings."""
 import json
+import sqlite3
 import subprocess
 import time
 import unittest
@@ -7,7 +8,7 @@ from unittest.mock import patch
 
 from orfeuscribe.pipeline import Result, literal_local
 from orfeuscribe.vocabulary import parse_vocabulary
-from tests.support import GTK, FakeProvider, make_app, pump, wav
+from tests.support import GTK, FakeProvider, FakeRecorder, make_app, pump, wav
 
 if GTK:
     from orfeuscribe import service
@@ -222,6 +223,84 @@ class RescueServiceTests(unittest.TestCase):
         app.cancel()
         self.assertEqual([i["reason"] for i in app.rescue.items()], ["cancelled"])
         self.assertNotIn("Rescued", app.connection.names())
+
+    def segmented(self, provider):
+        """Parts mode with 25 s being processed, 20 s queued and 8 s still in the recorder."""
+        app = make_app(self, provider, FakeRecorder(audio=wav(8)), pause_delivery=True)
+        app.context = {"wm_class": "gedit", "title": "Notes"}
+        app.start()
+        app._queue_segment(wav(25))
+        app.segment_queue.append((wav(20), 20.0))
+        return app
+
+    @staticmethod
+    def rescued_seconds(app):
+        return sorted(round(item["bytes"] / 32000) for item in app.rescue.items())
+
+    def test_segmented_revision_failure_keeps_every_pending_audio(self):
+        app = self.segmented(FakeProvider(fail_polish=True))
+        pump(self, app, ("error",))
+        self.assertEqual(self.rescued_seconds(app), [8, 20, 25], "every part once, none twice")
+        failed = [item for item in app.rescue.items() if item["history_id"]]
+        self.assertEqual([round(item["bytes"] / 32000) for item in failed], [25])
+        offer = json.loads(app.connection.values("Rescued")[0][0])
+        self.assertEqual(offer["id"], failed[0]["id"])
+        self.assertEqual((app.recorder.audio, app.segment_queue), (b"", []))
+
+    def test_segmented_transcription_failure_and_cancel_keep_every_pending_audio(self):
+        app = self.segmented(FakeProvider(fail_stt=True))
+        pump(self, app, ("error",))
+        self.assertEqual(self.rescued_seconds(app), [8, 20, 25])
+        app = self.segmented(FakeProvider())
+        app.cancel()
+        self.assertEqual(self.rescued_seconds(app), [8, 20, 25])
+
+    def test_segmented_history_failure_keeps_every_pending_audio(self):
+        app = self.segmented(FakeProvider())
+        with patch.object(app.history, "add", side_effect=sqlite3.OperationalError("database is locked")):
+            pump(self, app, ("error",))
+        self.assertEqual(self.rescued_seconds(app), [8, 20, 25])
+        self.assertNotIn("Deliver", app.connection.names())
+
+    def test_history_failure_keeps_the_audio_for_recovery(self):
+        app = make_app(self)
+        with patch.object(app.history, "add", side_effect=sqlite3.OperationalError("database is locked")):
+            self.dictate(app)
+            pump(self, app, ("error",))
+        items = app.rescue.items()
+        self.assertEqual([(item["reason"], round(item["bytes"] / 32000)) for item in items], [("error", 2)])
+        names = app.connection.names()
+        self.assertLess(names.index("Rescued"), names.index("Error"))
+        self.assertNotIn("Deliver", names)
+        self.assertIsNone(app.work_audio)
+        # The kept audio still produces the entry once the history works again.
+        app.connection.signals.clear()
+        self.assertTrue(app.recover(items[0]["id"]))
+        pump(self, app, ("done",))
+        self.assertEqual(len(app.history.search()), 1)
+        self.assertEqual(app.rescue.items(), [])
+
+    def test_history_failure_while_recovering_keeps_the_rescue(self):
+        app = make_app(self)
+        ident = app.rescue.save(wav(2), reason="error", context={"wm_class": "gedit", "title": "Notes"})
+        with patch.object(app.history, "add", side_effect=sqlite3.OperationalError("database is locked")):
+            self.assertTrue(app.recover(ident))
+            pump(self, app, ("error",))
+        self.assertEqual([item["id"] for item in app.rescue.items()], [ident])
+        self.assertEqual(json.loads(app.connection.values("Rescued")[0][0])["id"], ident)
+
+    def test_optional_audio_retention_and_pruning_never_block_delivery(self):
+        for name, error in (("retain_audio", OSError(28, "No space left on device")),
+                            ("prune_days", sqlite3.OperationalError("database is locked"))):
+            with self.subTest(failing=name):
+                app = make_app(self, audio_keep=3, history_days=30)
+                with patch.object(app.history, name, side_effect=error):
+                    self.dictate(app)
+                    pump(self, app, ("done",))
+                self.assertEqual(len(app.history.search()), 1, "the text is saved")
+                self.assertIn("Deliver", app.connection.names())
+                self.assertNotIn("Error", app.connection.names())
+                self.assertIsNotNone(app.last_record)
 
     def test_spoken_cancel_keeps_audio_and_recover_keeps_the_words(self):
         app = make_app(self, FakeProvider(raw="this is no good, cancel dictation"))

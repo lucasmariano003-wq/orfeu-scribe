@@ -182,7 +182,7 @@ msgstr "Italiano"
 msgid "Latin"
 msgstr "Latim"
 
-#: orfeuscribe/media.py:25 orfeuscribe/service.py:828
+#: orfeuscribe/media.py:25 orfeuscribe/service.py:854
 msgid "Choose an audio or video file (MP4, MKV, WebM, WAV, MP3, M4A, OGG or FLAC)."
 msgstr "Escolha um arquivo de áudio ou vídeo (MP4, MKV, WebM, WAV, MP3, M4A, OGG ou FLAC)."
 
@@ -352,7 +352,7 @@ msgstr "O serviço recusou este pedido. Confira as permissões da conta."
 msgid "Endpoint or model not found. Check the server URL and the model name."
 msgstr "Endereço ou modelo não encontrado. Confira a URL do servidor e o nome do modelo."
 
-#: orfeuscribe/providers/openai_compat.py:52 orfeuscribe/providers/openai_compat.py:167
+#: orfeuscribe/providers/openai_compat.py:52 orfeuscribe/providers/openai_compat.py:172
 msgid "The audio is too large for the service."
 msgstr "O áudio é grande demais para o serviço."
 
@@ -369,39 +369,39 @@ msgstr "O serviço retornou um erro (HTTP {status}). Tente novamente."
 msgid "Use an https:// server URL (http:// is accepted only for this computer)."
 msgstr "Use uma URL de servidor https:// (http:// só é aceito para este computador)."
 
-#: orfeuscribe/providers/openai_compat.py:74
+#: orfeuscribe/providers/openai_compat.py:79
 msgid "The API key could not be read."
 msgstr "Não foi possível ler a chave de API."
 
-#: orfeuscribe/providers/openai_compat.py:94
+#: orfeuscribe/providers/openai_compat.py:99
 msgid "Could not reach the service. Check the connection and the server URL."
 msgstr "Não foi possível alcançar o serviço. Confira a conexão e a URL do servidor."
 
-#: orfeuscribe/providers/openai_compat.py:96
+#: orfeuscribe/providers/openai_compat.py:101
 msgid "The service returned an invalid response."
 msgstr "O serviço retornou uma resposta inválida."
 
-#: orfeuscribe/providers/openai_compat.py:103
+#: orfeuscribe/providers/openai_compat.py:108
 msgid "The service did not list any models."
 msgstr "O serviço não listou nenhum modelo."
 
-#: orfeuscribe/providers/openai_compat.py:165
+#: orfeuscribe/providers/openai_compat.py:170
 msgid "The audio is empty."
 msgstr "O áudio está vazio."
 
-#: orfeuscribe/providers/openai_compat.py:172
+#: orfeuscribe/providers/openai_compat.py:177
 msgid "No speech was found in this audio. Check the microphone and try again."
 msgstr "Não foi encontrada fala neste áudio. Confira o microfone e tente novamente."
 
-#: orfeuscribe/providers/openai_compat.py:213
+#: orfeuscribe/providers/openai_compat.py:218
 msgid "The model reached its length limit. Your transcript was kept."
 msgstr "O modelo atingiu o limite de tamanho. Sua transcrição foi preservada."
 
-#: orfeuscribe/providers/openai_compat.py:219
+#: orfeuscribe/providers/openai_compat.py:224
 msgid "The model returned no text. Your transcript was kept."
 msgstr "O modelo não retornou texto. Sua transcrição foi preservada."
 
-#: orfeuscribe/providers/openai_compat.py:246
+#: orfeuscribe/providers/openai_compat.py:251
 msgid "The answer did not come in a safe format. The selection was kept."
 msgstr "A resposta não veio em formato seguro. A seleção foi preservada."
 
@@ -429,39 +429,43 @@ msgstr "Responder com contexto está desligado nas Configurações: ditado comum
 msgid "The dictation was too short. Speak a little longer and try again."
 msgstr "O ditado ficou curto demais. Fale um pouco mais e tente novamente."
 
-#: orfeuscribe/service.py:659
+#: orfeuscribe/service.py:670
 msgid "Could not finish the dictation. Try again."
 msgstr "Não foi possível concluir o ditado. Tente novamente."
 
-#: orfeuscribe/service.py:686
+#: orfeuscribe/service.py:697
 msgid "Could not add the note. The text is in the history."
 msgstr "Não foi possível acrescentar a nota. O texto está no histórico."
 
-#: orfeuscribe/service.py:699
+#: orfeuscribe/service.py:705
 msgid "Could not save the dictation in the history. Check the free disk space."
 msgstr "Não foi possível salvar o ditado no histórico. Confira o espaço livre em disco."
 
-#: orfeuscribe/service.py:715
+#: orfeuscribe/service.py:717
+msgid "The text was saved, but its audio could not be kept."
+msgstr "O texto foi salvo, mas não foi possível guardar o áudio."
+
+#: orfeuscribe/service.py:741
 msgid "Recovered: the entry is in the history"
 msgstr "Recuperado: a entrada está no histórico"
 
-#: orfeuscribe/service.py:722
+#: orfeuscribe/service.py:748
 msgid "Added to your notes"
 msgstr "Acrescentado às suas notas"
 
-#: orfeuscribe/service.py:728
+#: orfeuscribe/service.py:754
 msgid "Saved to history"
 msgstr "Salvo no histórico"
 
-#: orfeuscribe/service.py:810
+#: orfeuscribe/service.py:836
 msgid "Could not apply the history retention. Check the free disk space."
 msgstr "Não foi possível aplicar a retenção do histórico. Confira o espaço livre em disco."
 
-#: orfeuscribe/service.py:821
+#: orfeuscribe/service.py:847
 msgid "Finish or cancel the current work first."
 msgstr "Conclua ou cancele o trabalho atual primeiro."
 
-#: orfeuscribe/service.py:875
+#: orfeuscribe/service.py:901
 msgid "Could not transcribe the file. Check the format and the connection, then try again."
 msgstr "Não foi possível transcrever o arquivo. Confira o formato e a conexão e tente novamente."
 
