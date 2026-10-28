@@ -717,6 +717,8 @@ class OrfeuScribeWindow(Adw.ApplicationWindow):
                                                    "Orfeu Scribe applies spoken commands, your vocabulary and "
                                                    "capitalization locally."))
         self.revision_switch = self._switch(_("Revise text with a language model"), "", "revision_enabled", True)
+        # Connected after the handler that saves the setting: the related rows follow it at once.
+        self.revision_switch.connect("notify::active", lambda *_args: self._sync_revision())
         group.add(self.revision_switch)
         self.same_switch = self._switch(_("Use the same server and key"), _("As set for speech-to-text above."),
                                         "revision_same_server", True)

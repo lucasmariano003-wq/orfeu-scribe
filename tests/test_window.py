@@ -113,6 +113,20 @@ class WindowTests(unittest.TestCase):
         self.assertEqual(sorted(ready), [("revision", ["synthetic-model"], ""), ("stt", ["synthetic-model"], "")])
         self.assertNotIn("Save the server URL and a model first.", self.toasts)
 
+    # --- 12. The revision switch updates the rows that depend on it -------------------
+    def test_revision_switch_updates_related_rows(self):
+        self.app.config.update(revision_enabled=True, revision_same_server=False)
+        self.window._sync_revision()
+        self.window.revision_switch.set_active(False)
+        self.assertFalse(self.app.config["revision_enabled"])
+        self.assertFalse(self.window.revision_model.get_sensitive())
+        self.assertFalse(self.window.same_switch.get_sensitive())
+        self.assertFalse(self.window.revision_url.get_visible())
+        self.window.revision_switch.set_active(True)
+        self.assertTrue(self.window.revision_model.get_sensitive())
+        self.assertTrue(self.window.same_switch.get_sensitive())
+        self.assertTrue(self.window.revision_url.get_visible(), "a separate server shows its own address")
+
 
 class PrivateDisplayTests(unittest.TestCase):
     """Runs WindowTests in a private Xvfb so the default suite exercises the real widgets."""
