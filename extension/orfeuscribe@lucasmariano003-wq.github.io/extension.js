@@ -680,9 +680,7 @@ export default class OrfeuScribeExtension extends Extension {
             return;
         }
         const type = St.ClipboardType.CLIPBOARD;
-        const mimes = this._clipboard.get_mimetypes(type);
-        const mime = mimes.find(m => m === 'image/png') ?? mimes.find(m => m === 'text/plain;charset=utf-8') ??
-            mimes.find(m => m.startsWith('text/plain')) ?? mimes[0];
+        const mime = this._clipboardMime(this._clipboard.get_mimetypes(type));
         const paste = (bytes = null, previousText = null) => {
             if (!valid() || !this._alive || target !== global.display.focus_window || Main.sessionMode.isLocked) {
                 failed?.();
@@ -732,6 +730,18 @@ export default class OrfeuScribeExtension extends Extension {
             });
         else
             paste();
+    }
+
+    // St.Clipboard restores a single representation (set_content takes one MIME type),
+    // so the one that keeps the most meaning is chosen: an image, copied files (the
+    // form Files uses for copy and cut), then plain text. Other forms of the same copy,
+    // such as the formatting of rich text, are not restored.
+    _clipboardMime(mimes) {
+        for (const wanted of ['image/png', 'x-special/gnome-copied-files', 'text/uri-list', 'text/plain;charset=utf-8']) {
+            if (mimes.includes(wanted))
+                return wanted;
+        }
+        return mimes.find(m => m.startsWith('text/plain')) ?? mimes[0];
     }
 
     _flushDeliveries() {

@@ -134,3 +134,23 @@ print('A part arriving during a revert is pasted after the transcript; success c
     check(!s._reverting, '9c: the revert never ended', log);
 }
 print('A revert that could not paste is neither recorded nor announced as done.');
+
+// 8. The clipboard is restored with the representation that keeps the most meaning.
+for (const [offered, expected] of [
+    [{'x-special/gnome-copied-files': 'copy\nfile:///synthetic/a.pdf', 'text/uri-list': 'file:///synthetic/a.pdf',
+        'text/plain;charset=utf-8': '/synthetic/a.pdf'}, 'x-special/gnome-copied-files'],
+    [{'text/uri-list': 'file:///synthetic/a.pdf', 'text/plain;charset=utf-8': '/synthetic/a.pdf'}, 'text/uri-list'],
+    [{'image/png': 'PNG', 'text/html': '<img>'}, 'image/png'],
+    [{'text/html': '<b>bold</b>', 'text/plain;charset=utf-8': 'bold'}, 'text/plain;charset=utf-8'],
+]) {
+    const {s, log, clip} = world();
+    global.display.focus_window = editor;
+    clip.mimes = {...offered};
+    s._deliver('Dictated text.');
+    run();
+    check(log.includes('pasted Dictated text.'), `8: not pasted with ${Object.keys(offered)}`, log);
+    const restored = Object.keys(clip.mimes);
+    check(restored.length === 1 && restored[0] === expected && clip.mimes[expected] === offered[expected],
+        `8: restored ${JSON.stringify(clip.mimes)} instead of ${expected}`, log);
+}
+print('After a paste, copied files come back as files and images as images (one representation).');

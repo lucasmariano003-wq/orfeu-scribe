@@ -212,6 +212,10 @@ application; Windows and macOS are not supported.
 - Spoken commands exist for English, Portuguese and Spanish only.
 - Wayland pasting goes through the extension's virtual keyboard and clipboard;
   apps that ignore Ctrl+V (or Ctrl+Shift+V in terminals) will not receive text.
+- After a paste, the clipboard gets back only one form of what you had copied:
+  an image, copied files (as files, for Files), or plain text. The formatting
+  of copied rich text (HTML) is not restored. Behaviour with real apps in a
+  GNOME session has not been verified for every case.
 - One recording is limited to 10 minutes; files are split into 5-minute parts.
 
 ## Development

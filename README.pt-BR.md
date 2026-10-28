@@ -212,6 +212,11 @@ para Linux/GNOME; Windows e macOS não são suportados.
 - No Wayland a colagem passa pelo teclado virtual e pela área de transferência
   da extensão; aplicativos que ignoram Ctrl+V (ou Ctrl+Shift+V nos terminais)
   não recebem o texto.
+- Depois de colar, a área de transferência recupera só uma forma do que você
+  tinha copiado: uma imagem, arquivos copiados (como arquivos, para o Arquivos)
+  ou texto simples. A formatação de texto rico copiado (HTML) não é
+  restaurada. O comportamento com aplicativos reais numa sessão GNOME não foi
+  verificado em todos os casos.
 - Uma gravação vai até 10 minutos; arquivos são divididos em partes de 5 minutos.
 
 ## Desenvolvimento
