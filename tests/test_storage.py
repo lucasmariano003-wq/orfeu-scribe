@@ -82,6 +82,35 @@ class HistoryTests(Base):
             self.assertEqual(db.execute("PRAGMA integrity_check").fetchone()[0], "ok")
         self.assertIsNone(History(path).last_backup)
 
+    def test_format_update_copies_expire_with_the_history(self):
+        from datetime import timedelta
+        path = self.root / "old.db"
+        with closing(sqlite3.connect(path)) as db:
+            db.execute(OLD_SCHEMA)
+            db.execute("INSERT INTO dictations VALUES (1,'2020-01-01T00:00:00+00:00','e','t','dictation',"
+                       "'DELETED-SYNTHETIC-MARKER','DELETED-SYNTHETIC-MARKER','s','m',1,1,1,3,NULL)")
+            db.commit()
+        history = History(path)
+        made = datetime.now(timezone.utc)
+        self.assertEqual([p for _stamp, p in history.backups()], [history.last_backup])
+        export = self.root / "old-before-my-own-export.db"
+        export.write_text("a file the user named like a copy")
+        self.assertEqual(history.prune_days(1), 1)
+        self.assertEqual(history.prune_backups(1, now=made + timedelta(hours=12)), 0, "kept while it is recent")
+        self.assertEqual(history.prune_backups(1, now=made + timedelta(days=2)), 1)
+        self.assertEqual(history.backups(), [])
+        self.assertFalse(any("DELETED-SYNTHETIC-MARKER".encode() in p.read_bytes()
+                             for p in self.root.iterdir() if p.is_file() and p.suffix == ".db"))
+        self.assertTrue(export.exists(), "only copies made by a format update are deleted")
+        # History kept forever: the copy still goes after 30 days.
+        stale = self.root / "old-before-20200101T000000000000Z-synthetic.db"
+        stale.write_bytes(b"synthetic")
+        recent = self.root / f"old-before-{made.strftime('%Y%m%dT%H%M%S%fZ')}-synthetic.db"
+        recent.write_bytes(b"synthetic")
+        self.assertEqual(history.prune_backups(0, now=made + timedelta(days=29)), 1)
+        self.assertEqual((stale.exists(), recent.exists()), (False, True))
+        self.assertEqual(history.prune_backups(0, now=made + timedelta(days=31)), 1)
+
     def test_failed_migration_rolls_back(self):
         path = self.root / "old.db"
         with closing(sqlite3.connect(path)) as db:

@@ -5,6 +5,7 @@ from datetime import datetime, timezone, timedelta
 from contextlib import contextmanager, closing
 import os
 import fcntl
+import re
 import tempfile
 from pathlib import Path
 import sqlite3
@@ -17,6 +18,10 @@ FILENAME = "history.db"
 WRITTEN_MODES = ('dictation', 'message', 'email', 'prompt', 'literal', 'translation', 'outline', 'script',
                  'file', 'edit', 'write')
 STYLE_MODES = ('dictation', 'message', 'email', 'prompt', 'outline', 'script')
+# A copy made before a format update protects against a failed migration for a while.
+# It holds entries like the live history, so it never outlives the history retention.
+BACKUP_DAYS = 30
+BACKUP_STAMP = '%Y%m%dT%H%M%S%fZ'
 
 
 class History:
@@ -53,7 +58,7 @@ class History:
             if existed and missing:
                 # No backup on the same connection inside BEGIN IMMEDIATE: the API would
                 # wait for its own transaction. The external lock serializes this.
-                stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+                stamp = datetime.now(timezone.utc).strftime(BACKUP_STAMP)
                 backup_fd, name = tempfile.mkstemp(prefix=f'{self.path.stem}-before-{stamp}-', suffix='.db',
                                                    dir=self.path.parent)
                 os.close(backup_fd)
@@ -292,3 +297,29 @@ class History:
         for ident, created_at in ids:
             self.delete(ident, created_at)
         return len(ids)
+
+    def backups(self):
+        """The private copies made before format updates, next to the history (not user exports)."""
+        pattern = re.compile(re.escape(self.path.stem) + r'-before-(\d{8}T\d{12}Z)-[^/]*\.db$')
+        found = []
+        for path in self.path.parent.glob(f'{self.path.stem}-before-*.db'):
+            match = pattern.match(path.name)
+            if match and not path.is_symlink() and path.is_file():
+                stamp = datetime.strptime(match[1], BACKUP_STAMP).replace(tzinfo=timezone.utc)
+                found.append((stamp, path))
+        return sorted(found)
+
+    def prune_backups(self, history_days=0, now=None):
+        """Deletes format-update copies after BACKUP_DAYS, or sooner if the history is kept for fewer days.
+
+        A copy made at time T holds only entries created before T: once it is older
+        than the history retention, every entry in it has left the live history too.
+        """
+        days = min(BACKUP_DAYS, history_days) if history_days > 0 else BACKUP_DAYS
+        cutoff = (now or datetime.now(timezone.utc)) - timedelta(days=days)
+        removed = 0
+        for stamp, path in self.backups():
+            if stamp < cutoff:
+                path.unlink(missing_ok=True)
+                removed += 1
+        return removed

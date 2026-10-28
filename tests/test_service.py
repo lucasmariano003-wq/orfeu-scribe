@@ -316,6 +316,13 @@ class RescueServiceTests(unittest.TestCase):
                          [other + ".json", other + ".wav"])
         self.assertFalse(app.delete_entry(row["id"]))
 
+    def test_hourly_retention_also_expires_format_update_copies(self):
+        app = make_app(self, history_days=7)
+        stale = app.history.path.parent / "history-before-20200101T000000000000Z-synthetic.db"
+        stale.write_bytes(b"synthetic")
+        app._retention()
+        self.assertFalse(stale.exists())
+
     def test_spoken_cancel_keeps_audio_and_recover_keeps_the_words(self):
         app = make_app(self, FakeProvider(raw="this is no good, cancel dictation"))
         self.dictate(app)

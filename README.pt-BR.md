@@ -144,7 +144,12 @@ de revisão (duas, se a guarda precisar refazer).
   `~/.local/share/orfeuscribe/history.db` (permissões privadas; para sempre por
   padrão, ou pelo número de dias que você definir), áudio só se *Guardar o áudio
   dos últimos ditados* for maior que 0, áudio de ditados com falha ou cancelados
-  por 24 horas em `~/.local/share/orfeuscribe/rescue/`, configurações em
+  por 24 horas em `~/.local/share/orfeuscribe/rescue/` (excluir uma entrada
+  exclui também o áudio guardado para recuperá-la), uma cópia privada do
+  histórico feita antes de uma atualização mudar seu formato
+  (`history-before-*.db`, apagada após 30 dias, ou antes, se você guardar o
+  histórico por menos dias; as exportações que você cria nunca são apagadas),
+  configurações em
   `~/.config/orfeuscribe/settings.json`, vocabulário em
   `~/.config/orfeuscribe/vocabulary.txt` e chaves de API no chaveiro.
 - As mensagens de erro nunca trazem respostas do servidor nem chaves. O

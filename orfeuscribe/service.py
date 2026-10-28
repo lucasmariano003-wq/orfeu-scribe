@@ -143,6 +143,7 @@ class OrfeuScribeApplication(Adw.Application):
         self.config = Config(self.config_dir)
         self.history = History(self.history_path)
         self.history.prune_days(self.config['history_days'])
+        self.history.prune_backups(self.config['history_days'])
         from .rescue import RescueStore
         self.rescue = RescueStore(self.history_path.parent / "rescue")
         self._prune_rescue()
@@ -838,6 +839,7 @@ class OrfeuScribeApplication(Adw.Application):
     def _retention(self):
         try:
             self.history.prune_days(self.config['history_days'])
+            self.history.prune_backups(self.config['history_days'])
             self._prune_rescue()
             self.reload_history()
         except (OSError, sqlite3.Error):

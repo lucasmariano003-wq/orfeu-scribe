@@ -1263,6 +1263,12 @@ class OrfeuScribeWindow(Adw.ApplicationWindow):
                                           "private folder so you can recover them, then deleted."))
         rescue.set_subtitle_lines(0)
         group.add(rescue)
+        backups = Adw.ActionRow(title=_("Copies before format updates"),
+                                subtitle=_("Before an update changes the history's format, a private copy is kept "
+                                           "next to it for 30 days (fewer if the history is kept for fewer days), "
+                                           "then deleted. Exports you create are never deleted."))
+        backups.set_subtitle_lines(0)
+        group.add(backups)
         return group
 
     def _retention_dialog(self, *_args):
@@ -1286,6 +1292,7 @@ class OrfeuScribeWindow(Adw.ApplicationWindow):
                 try:
                     self.app.config["history_days"] = days
                     count = self.app.history.prune_days(days)
+                    self.app.history.prune_backups(days)
                     self.app.reload_history()
                     self.refresh_history()
                     self.refresh_suggestions()
