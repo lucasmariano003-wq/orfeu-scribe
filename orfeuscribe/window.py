@@ -475,9 +475,8 @@ class OrfeuScribeWindow(Adw.ApplicationWindow):
             if choice != "delete":
                 return
             try:
-                self.app.history.delete(row['id'], row['created_at'])
+                self.app.delete_entry(row['id'], row['created_at'])
                 self.edit_drafts.pop(row['id'], None)
-                self.app.reload_history()
                 self.refresh_history()
                 self.refresh_suggestions()
                 self.toast(_("Entry deleted."))

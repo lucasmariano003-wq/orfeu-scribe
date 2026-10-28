@@ -598,6 +598,14 @@ class OrfeuScribeApplication(Adw.Application):
                    self.mode, request=request, recover=ident)
         return True
 
+    def delete_entry(self, ident, created_at=None):
+        """Deletes a history entry and everything kept for it, including its rescued audio."""
+        if not self.history.delete(ident, created_at):
+            return False
+        self.rescue.remove_linked(ident)
+        self.reload_history()
+        return True
+
     def reprocess(self, row, mode):
         if self.state in ("listening", "transcribing", "polishing"):
             return False

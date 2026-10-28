@@ -86,6 +86,17 @@ class WindowTests(unittest.TestCase):
         self.assertEqual(self.app.credentials.lookup("stt"), "SYNTHETIC-NEW-KEY")
         self.assertNotIn("SYNTHETIC-NEW-KEY", config.path.read_text())
 
+    # --- 4. Deleting an entry deletes the audio kept for it ----------------------------
+    def test_delete_dialog_removes_the_linked_rescue(self):
+        from tests.support import wav
+        row = self.app.history.search()[0]
+        rescue = self.app.rescue.save(wav(2), reason="error", history_id=row["id"])
+        self.window._delete_dialog(row)
+        self.window.last_dialog.emit("response", "delete")
+        self.assertIsNone(self.app.history.get(row["id"]))
+        self.assertIsNone(self.app.rescue.get(rescue))
+        self.assertIn("Entry deleted.", self.toasts)
+
 
 class PrivateDisplayTests(unittest.TestCase):
     """Runs WindowTests in a private Xvfb so the default suite exercises the real widgets."""

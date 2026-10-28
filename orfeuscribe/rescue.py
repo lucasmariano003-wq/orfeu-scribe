@@ -114,6 +114,22 @@ class RescueStore:
                 return False
         return True
 
+    def remove_linked(self, history_id):
+        """Deletes the rescues of a history entry (its audio and metadata), expired or not."""
+        if not self.directory.is_dir() or not isinstance(history_id, int):
+            return 0
+        removed = 0
+        for path in list(self.directory.glob("*.json")):
+            if not IDENT.match(path.stem) or path.is_symlink():
+                continue
+            try:
+                meta = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            if isinstance(meta, dict) and meta.get("history_id") == history_id:
+                removed += self.remove(path.stem)
+        return removed
+
     def items(self, now=None):
         if not self.directory.is_dir():
             return []

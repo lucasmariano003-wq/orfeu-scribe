@@ -302,6 +302,20 @@ class RescueServiceTests(unittest.TestCase):
                 self.assertNotIn("Error", app.connection.names())
                 self.assertIsNotNone(app.last_record)
 
+    def test_deleting_an_entry_deletes_its_rescued_audio(self):
+        app = make_app(self, FakeProvider(fail_polish=True))
+        self.dictate(app)
+        pump(self, app, ("error",))
+        row = app.history.search()[0]
+        other = app.rescue.save(wav(2), reason="cancelled")
+        self.assertEqual(len(app.rescue.items()), 2)
+        self.assertTrue(app.delete_entry(row["id"], row["created_at"]))
+        self.assertIsNone(app.history.get(row["id"]))
+        self.assertEqual([item["id"] for item in app.rescue.items()], [other], "only the entry's own audio goes")
+        self.assertEqual(sorted(path.name for path in app.rescue.directory.iterdir()),
+                         [other + ".json", other + ".wav"])
+        self.assertFalse(app.delete_entry(row["id"]))
+
     def test_spoken_cancel_keeps_audio_and_recover_keeps_the_words(self):
         app = make_app(self, FakeProvider(raw="this is no good, cancel dictation"))
         self.dictate(app)
