@@ -1,11 +1,10 @@
 # Attribution
 
 Orfeu Scribe is an independent, general-purpose derivative of **Calamus**, a
-private Linux dictation application commissioned and directed by Lucas Mariano.
-The owner authorized this derivative and its release under GPL-3.0-or-later.
-The private Calamus repository and its runtime data remain separate.
+private Linux dictation application. This derivative is released under
+GPL-3.0-or-later. The private Calamus repository and its runtime data remain
+separate.
 
-Development used AI coding assistance, including Codex, Claude Code and Hermes.
 The new project has its own identifiers, provider configuration, interface,
 documentation, tests and public Git history. No personal histories, recordings,
 account credentials or private Git history are included.
