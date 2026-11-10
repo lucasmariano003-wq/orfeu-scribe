@@ -6,7 +6,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pt_BR\n"
 "Language-Team: none\n"
-"Last-Translator: Orfeu Scribe contributors\n"
+"Last-Translator: Lucas Mariano <262500634+lucasmariano003-wq@users.noreply.github.com>\n"
 "PO-Revision-Date: 2026-10-21 00:00+0000\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
@@ -689,10 +689,6 @@ msgstr "Sobre o Orfeu Scribe"
 #: orfeuscribe/window.py:157
 msgid "Main Menu"
 msgstr "Menu Principal"
-
-#: orfeuscribe/window.py:169
-msgid "Orfeu Scribe contributors"
-msgstr "Colaboradores do Orfeu Scribe"
 
 #: orfeuscribe/window.py:170
 msgid "Voice dictation for GNOME with a speech service you choose."

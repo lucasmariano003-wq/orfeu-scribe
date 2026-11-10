@@ -166,7 +166,7 @@ class OrfeuScribeWindow(Adw.ApplicationWindow):
 
     def _about(self, *_args):
         dialog = Adw.AboutDialog(application_name=APP_NAME, application_icon=APP_ID, version=__version__,
-                                 developer_name=_("Orfeu Scribe contributors"),
+                                 developer_name="Lucas Mariano", copyright="© 2026 Lucas Mariano",
                                  comments=_("Voice dictation for GNOME with a speech service you choose."),
                                  license_type=Gtk.License.GPL_3_0)
         dialog.add_acknowledgement_section(_("Derived from"), ["Calamus"])

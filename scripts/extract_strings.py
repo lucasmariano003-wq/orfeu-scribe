@@ -66,7 +66,7 @@ def quote(text):
 
 
 def render(entries, translations=None, plural_forms=None):
-    out = [HEADER + (f'"Language: {translations["__language__"]}\\n"\n"Language-Team: none\\n"\n"Last-Translator: Orfeu Scribe contributors\\n"\n"PO-Revision-Date: 2026-10-21 00:00+0000\\n"\n"Plural-Forms: {plural_forms}\\n"\n'
+    out = [HEADER + (f'"Language: {translations["__language__"]}\\n"\n"Language-Team: none\\n"\n"Last-Translator: Lucas Mariano <262500634+lucasmariano003-wq@users.noreply.github.com>\\n"\n"PO-Revision-Date: 2026-10-21 00:00+0000\\n"\n"Plural-Forms: {plural_forms}\\n"\n'
                      if translations else "")]
     for msgid, entry in entries.items():
         lines = ["#: " + " ".join(entry["refs"])]

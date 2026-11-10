@@ -55,6 +55,15 @@ class WindowTests(unittest.TestCase):
             time.sleep(.01)
         return until()
 
+    def test_about_names_the_author(self):
+        from gi.repository import Adw
+        made = []
+        # Replace only present(), and on the class: the dialog is the real one, never shown.
+        with patch.object(Adw.AboutDialog, "present", lambda dialog, _parent: made.append(dialog)):
+            self.window._about()
+        self.assertEqual(made[0].get_developer_name(), "Lucas Mariano")
+        self.assertEqual(made[0].get_copyright(), "© 2026 Lucas Mariano")
+
     # --- 3. A key belongs to the server it was saved for -----------------------------
     def test_new_server_asks_before_reusing_the_saved_key(self):
         config, store = self.app.config, self.app.credentials

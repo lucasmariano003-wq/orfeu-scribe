@@ -685,10 +685,6 @@ msgstr ""
 msgid "Main Menu"
 msgstr ""
 
-#: orfeuscribe/window.py:169
-msgid "Orfeu Scribe contributors"
-msgstr ""
-
 #: orfeuscribe/window.py:170
 msgid "Voice dictation for GNOME with a speech service you choose."
 msgstr ""

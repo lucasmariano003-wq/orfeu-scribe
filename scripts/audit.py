@@ -50,9 +50,11 @@ ALLOWED = {
 DATA_SUFFIXES = {".wav", ".db", ".sqlite", ".ogg", ".mp3", ".mp4", ".mkv", ".env", ".pem", ".key"}
 
 # Public project identifiers are not personal runtime data. Mask only these
-# exact approved namespace components, leaving other account references and
-# credentials subject to the existing rules. Spaces preserve line numbers.
-PUBLIC_NAMESPACE = ("github.com/lucasmariano003-wq", "lucasmariano003_wq", "lucasmariano003-wq.github.io")
+# exact approved namespace components and the author's public name and
+# address, leaving other account references and credentials subject to the
+# existing rules. Spaces preserve line numbers.
+PUBLIC_NAMESPACE = ("262500634+lucasmariano003-wq@users.noreply.github.com", "Lucas Mariano",
+                    "github.com/lucasmariano003-wq", "lucasmariano003_wq", "lucasmariano003-wq.github.io")
 
 
 def files():
