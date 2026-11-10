@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import unittest.mock
 import xml.etree.ElementTree as ElementTree
 from pathlib import Path
 
@@ -131,6 +132,32 @@ class TranslationTests(unittest.TestCase):
             self.assertEqual(modes.title("prompt"), "AI instruction")
         finally:
             i18n.reload(languages=["en"])
+
+
+class IsolationGuardTests(unittest.TestCase):
+    """The window fixture writes under HOME, so it must never run with the account's real home."""
+
+    def setUp(self):
+        sys.path.insert(0, str(ROOT / "scripts"))
+
+    def test_window_fixture_refuses_the_account_home(self):
+        import pwd
+        import ui_fixture
+        real = pwd.getpwuid(os.getuid()).pw_dir
+        with unittest.mock.patch.dict(os.environ, HOME=real), \
+                unittest.mock.patch.object(Path, "mkdir", side_effect=AssertionError("wrote under HOME")):
+            with self.assertRaisesRegex(RuntimeError, "temporary HOME"):
+                ui_fixture.build("en")
+
+    def test_runner_notices_what_the_window_fixture_writes(self):
+        import run_tests
+        with tempfile.TemporaryDirectory() as name, unittest.mock.patch.dict(os.environ, HOME=name):
+            self.assertEqual(run_tests.real_traces(), [])
+            for relative in ("config/settings.json", "config/vocabulary.txt", "data/history.db"):
+                (Path(name) / relative).parent.mkdir(parents=True, exist_ok=True)
+                (Path(name) / relative).write_text("synthetic")
+            (Path(name) / "data/rescue").mkdir()
+            self.assertEqual(len(run_tests.real_traces()), 4)
 
 
 class ExtensionScriptTests(unittest.TestCase):

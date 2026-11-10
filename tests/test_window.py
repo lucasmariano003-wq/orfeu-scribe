@@ -35,6 +35,12 @@ class WindowTests(unittest.TestCase):
     def setUp(self):
         from gi.repository import GLib
         self.GLib = GLib
+        # A HOME per test: each window starts from the fixture's own history and settings, whatever ran before.
+        home = tempfile.mkdtemp(prefix="test-", dir=os.environ["HOME"])
+        self.addCleanup(shutil.rmtree, home, ignore_errors=True)
+        environment = patch.dict(os.environ, HOME=home)
+        environment.start()
+        self.addCleanup(environment.stop)
         self.app, self.window, _ids = self.build("en")
         if self.window is None:
             self.skipTest("no display connection")

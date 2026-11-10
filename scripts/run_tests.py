@@ -24,9 +24,11 @@ KEEP = ("PATH", "TERM", "TMPDIR", "GI_TYPELIB_PATH", "LD_LIBRARY_PATH", "GST_PLU
 
 def real_traces():
     home = Path.home()
-    return [path for path in (home / ".config/orfeuscribe", home / ".local/share/orfeuscribe",
-                              home / ".local/bin/orfeuscribe", home / f".local/share/gnome-shell/extensions/{UUID}")
-            if path.exists() or path.is_symlink()]
+    # The installed app's paths, plus the ones scripts/ui_fixture.py writes under a HOME it is given.
+    paths = (home / ".config/orfeuscribe", home / ".local/share/orfeuscribe", home / ".local/bin/orfeuscribe",
+             home / f".local/share/gnome-shell/extensions/{UUID}", home / "config/settings.json",
+             home / "config/vocabulary.txt", home / "data/history.db", home / "data/rescue")
+    return [path for path in paths if path.exists() or path.is_symlink()]
 
 
 def isolated_environment(base: Path) -> dict:

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import pwd
 import subprocess
 import sys
 from pathlib import Path
@@ -34,6 +35,11 @@ def isolated_environment(base: Path, language: str, display: dict) -> dict:
 
 def build(language: str):
     """Returns (app, window, ids) with synthetic history, rescue and settings. Call inside the isolated child."""
+    home = Path(os.environ["HOME"])
+    # The fixture writes synthetic settings, history and rescues under HOME. The account's home comes
+    # from the password database, so a forgotten HOME override cannot make it look temporary.
+    if home.resolve() == Path(pwd.getpwuid(os.getuid()).pw_dir).resolve():
+        raise RuntimeError("ui_fixture.build() needs a temporary HOME; see isolated_environment()")
     sys.path.insert(0, str(ROOT))
     from unittest import mock
     import gi
@@ -54,7 +60,6 @@ def build(language: str):
     from orfeuscribe.vocabulary import parse_vocabulary
     if not Gtk.init_check():
         return None, None, None
-    home = Path(os.environ["HOME"])
 
     class Isolated(service.OrfeuScribeApplication):
         def do_startup(self):
