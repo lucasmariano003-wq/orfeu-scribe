@@ -2,7 +2,7 @@
 
 GTK 4 needs a display. Under scripts/run_tests.py there is none, so the GTK
 tests below skip and ``PrivateDisplayTests`` runs them again in a child process
-inside a private Xvfb (``xvfb-run -a``), with the same isolated HOME, in-memory
+inside a private Xvfb (``xvfb-run -a``), with its own temporary HOME, in-memory
 settings and keyring, and no session bus. Without xvfb-run they are skipped.
 No HTTP leaves the process: model lists are answered by a local fake server.
 """
@@ -10,6 +10,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 import unittest
 from pathlib import Path
@@ -139,9 +140,22 @@ class PrivateDisplayTests(unittest.TestCase):
                     "NO_AT_BRIDGE": "1", "GTK_IM_MODULE": "simple", "GSETTINGS_BACKEND": "memory",
                     "ORFEUSCRIBE_SECRET_BACKEND": "memory", "GIO_USE_VFS": "local", "GTK_USE_PORTAL": "0",
                     "LANGUAGE": "en", "PYTHONPATH": str(ROOT)})
-        run = subprocess.run(["xvfb-run", "-a", "-s", "-screen 0 1280x1024x24 -nolisten tcp", sys.executable, "-m",
-                              "unittest", "-v", "tests.test_window"], cwd=ROOT, env=env, capture_output=True,
-                             text=True, timeout=180)
+        # Isolated even when run outside scripts/run_tests.py: the fixture writes its synthetic history
+        # and settings under HOME, and on a live session bus every application after the first one
+        # fails to export its object path.
+        with tempfile.TemporaryDirectory(prefix="orfeuscribe-window-") as name:
+            home = Path(name) / "home"
+            runtime = Path(name) / "run"
+            home.mkdir()
+            runtime.mkdir(mode=0o700)
+            env.update(HOME=str(home), XDG_CONFIG_HOME=str(home / ".config"),
+                       XDG_DATA_HOME=str(home / ".local/share"), XDG_CACHE_HOME=str(home / ".cache"),
+                       XDG_STATE_HOME=str(home / ".local/state"), XDG_RUNTIME_DIR=str(runtime),
+                       DBUS_SESSION_BUS_ADDRESS=f"unix:path={name}/no-session-bus",
+                       DBUS_SYSTEM_BUS_ADDRESS=f"unix:path={name}/no-system-bus")
+            run = subprocess.run(["xvfb-run", "-a", "-s", "-screen 0 1280x1024x24 -nolisten tcp", sys.executable,
+                                  "-m", "unittest", "-v", "tests.test_window"], cwd=ROOT, env=env,
+                                 capture_output=True, text=True, timeout=180)
         report = run.stdout + run.stderr
         self.assertEqual(run.returncode, 0, report[-6000:])
         self.assertNotIn("skipped 'runs inside", report)
