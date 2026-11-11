@@ -32,6 +32,7 @@ def real_traces():
 
 
 def isolated_environment(base: Path) -> dict:
+    """Only the KEEP variables survive; HOME, XDG, buses, settings and keyring point into base."""
     env = {key: os.environ[key] for key in KEEP if key in os.environ}
     runtime = base / "run"
     runtime.mkdir(mode=0o700)
@@ -49,16 +50,26 @@ def isolated_environment(base: Path) -> dict:
     return env
 
 
+def prepared_environment(base: Path) -> dict:
+    """isolated_environment() with the schema and the translations compiled into the same tree.
+
+    Shared with tests/test_window.py, so its Xvfb child gets the same environment whether the test
+    runs under this script or on its own.
+    """
+    env = isolated_environment(base)
+    (base / "schemas").mkdir()
+    subprocess.run(["glib-compile-schemas", "--strict", "--targetdir", str(base / "schemas"),
+                    str(ROOT / "extension" / UUID / "schemas")], check=True)
+    subprocess.run([sys.executable, str(ROOT / "scripts/compile_translations.py"), str(base / "build")],
+                   check=True, env=env, stdout=subprocess.DEVNULL)
+    return env
+
+
 def main(argv):
     before = real_traces()
     with tempfile.TemporaryDirectory(prefix="orfeuscribe-tests-") as name:
         base = Path(name)
-        env = isolated_environment(base)
-        (base / "schemas").mkdir()
-        subprocess.run(["glib-compile-schemas", "--strict", "--targetdir", str(base / "schemas"),
-                        str(ROOT / "extension" / UUID / "schemas")], check=True)
-        subprocess.run([sys.executable, str(ROOT / "scripts/compile_translations.py"), str(base / "build")],
-                       check=True, env=env, stdout=subprocess.DEVNULL)
+        env = prepared_environment(base)
         command = [sys.executable, "-m", "unittest"] + (argv or ["discover", "-s", "tests", "-t", "."])
         status = subprocess.run(command, cwd=ROOT, env=env).returncode
         if not argv and shutil.which("gjs"):

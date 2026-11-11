@@ -159,6 +159,20 @@ class IsolationGuardTests(unittest.TestCase):
             (Path(name) / "data/rescue").mkdir()
             self.assertEqual(len(run_tests.real_traces()), 4)
 
+    def test_runner_environment_drops_what_is_not_allowlisted(self):
+        import run_tests
+        sentinel = "ORFEUSCRIBE_TEST_SENTINEL"
+        with tempfile.TemporaryDirectory() as name, \
+                unittest.mock.patch.dict(os.environ, {sentinel: "synthetic-sentinel-not-a-secret"}):
+            env = run_tests.isolated_environment(Path(name))
+            # What a real child process receives, not the dictionary handed to it.
+            child = subprocess.run([sys.executable, "-I", "-c", "import os; print('\\n'.join(sorted(os.environ)))"],
+                                   env=env, capture_output=True, text=True, check=True)
+        received = set(child.stdout.split())
+        self.assertNotIn(sentinel, received)
+        self.assertLessEqual(received, set(run_tests.KEEP) | set(env))
+        self.assertEqual(env["HOME"], str(Path(name) / "home"))
+
 
 class ExtensionScriptTests(unittest.TestCase):
     @unittest.skipUnless(os.path.exists("/usr/bin/gjs"), "gjs is not installed")

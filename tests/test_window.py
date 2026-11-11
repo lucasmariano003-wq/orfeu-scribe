@@ -2,8 +2,10 @@
 
 GTK 4 needs a display. Under scripts/run_tests.py there is none, so the GTK
 tests below skip and ``PrivateDisplayTests`` runs them again in a child process
-inside a private Xvfb (``xvfb-run -a``), with its own temporary HOME, in-memory
-settings and keyring, and no session bus. Without xvfb-run they are skipped.
+inside a private Xvfb (``xvfb-run -a``), in the same restricted environment
+scripts/run_tests.py builds: its own temporary HOME, in-memory settings and
+keyring, no session bus and nothing else from the caller's environment, also
+when this module is run on its own. Without xvfb-run they are skipped.
 No HTTP leaves the process: model lists are answered by a local fake server.
 """
 import os
@@ -18,6 +20,12 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parent.parent
 CHILD = "ORFEUSCRIBE_WINDOW_CHILD"
+SENTINEL = "ORFEUSCRIBE_TEST_SENTINEL"
+# What GTK needs inside the private Xvfb, on top of scripts/run_tests.py's restricted environment.
+PRIVATE_DISPLAY = {CHILD: "1", "GDK_BACKEND": "x11", "GSK_RENDERER": "cairo", "GTK_IM_MODULE": "simple",
+                   "GIO_USE_VFS": "local", "GTK_USE_PORTAL": "0", "LANGUAGE": "en", "PYTHONPATH": str(ROOT)}
+# xvfb-run is a shell script: it sets the display and its cookie, and the shell exports these.
+ADDED_BY_XVFB_RUN = {"DISPLAY", "XAUTHORITY", "PWD", "OLDPWD", "SHLVL", "_"}
 
 
 def has_display():
@@ -144,30 +152,41 @@ class WindowTests(unittest.TestCase):
         self.assertTrue(self.window.revision_url.get_visible(), "a separate server shows its own address")
 
 
+def runner():
+    if str(ROOT / "scripts") not in sys.path:
+        sys.path.insert(0, str(ROOT / "scripts"))
+    import run_tests
+    return run_tests
+
+
+@unittest.skipUnless(os.environ.get(CHILD) == "1", "runs inside a private Xvfb")
+class ChildEnvironmentTests(unittest.TestCase):
+    """Looks at the environment the Xvfb child really received, not at the code that built it."""
+
+    def test_only_the_restricted_environment_reaches_the_child(self):
+        # Names only: a failure report must never print the values of a variable that leaked.
+        received = set(os.environ)
+        self.assertNotIn(SENTINEL, received, "a variable outside the allowlist reached the child")
+        with tempfile.TemporaryDirectory() as name:
+            allowed = set(runner().KEEP) | set(runner().isolated_environment(Path(name)))
+        allowed |= set(PRIVATE_DISPLAY) | ADDED_BY_XVFB_RUN
+        self.assertEqual(sorted(received - allowed), [])
+
+
 class PrivateDisplayTests(unittest.TestCase):
     """Runs WindowTests in a private Xvfb so the default suite exercises the real widgets."""
 
     @unittest.skipIf(os.environ.get(CHILD) == "1", "already inside the private display")
     @unittest.skipUnless(shutil.which("xvfb-run"), "xvfb-run is not installed")
     def test_window_handlers_in_a_private_display(self):
-        env = {key: value for key, value in os.environ.items() if key not in ("DISPLAY", "WAYLAND_DISPLAY")}
-        env.update({CHILD: "1", "GDK_BACKEND": "x11", "GSK_RENDERER": "cairo", "GTK_A11Y": "none",
-                    "NO_AT_BRIDGE": "1", "GTK_IM_MODULE": "simple", "GSETTINGS_BACKEND": "memory",
-                    "ORFEUSCRIBE_SECRET_BACKEND": "memory", "GIO_USE_VFS": "local", "GTK_USE_PORTAL": "0",
-                    "LANGUAGE": "en", "PYTHONPATH": str(ROOT)})
-        # Isolated even when run outside scripts/run_tests.py: the fixture writes its synthetic history
-        # and settings under HOME, and on a live session bus every application after the first one
-        # fails to export its object path.
-        with tempfile.TemporaryDirectory(prefix="orfeuscribe-window-") as name:
-            home = Path(name) / "home"
-            runtime = Path(name) / "run"
-            home.mkdir()
-            runtime.mkdir(mode=0o700)
-            env.update(HOME=str(home), XDG_CONFIG_HOME=str(home / ".config"),
-                       XDG_DATA_HOME=str(home / ".local/share"), XDG_CACHE_HOME=str(home / ".cache"),
-                       XDG_STATE_HOME=str(home / ".local/state"), XDG_RUNTIME_DIR=str(runtime),
-                       DBUS_SESSION_BUS_ADDRESS=f"unix:path={name}/no-session-bus",
-                       DBUS_SYSTEM_BUS_ADDRESS=f"unix:path={name}/no-system-bus")
+        # The runner's own restricted environment, also when this test is run on its own: the fixture
+        # writes its synthetic history and settings under HOME, on a live session bus every application
+        # after the first one fails to export its object path, and nothing else from the caller's
+        # environment belongs in the child. The synthetic sentinel proves it; the child checks for it.
+        with tempfile.TemporaryDirectory(prefix="orfeuscribe-window-") as name, \
+                patch.dict(os.environ, {SENTINEL: "synthetic-sentinel-not-a-secret"}):
+            env = runner().prepared_environment(Path(name))
+            env.update(PRIVATE_DISPLAY)
             run = subprocess.run(["xvfb-run", "-a", "-s", "-screen 0 1280x1024x24 -nolisten tcp", sys.executable,
                                   "-m", "unittest", "-v", "tests.test_window"], cwd=ROOT, env=env,
                                  capture_output=True, text=True, timeout=180)
@@ -175,6 +194,8 @@ class PrivateDisplayTests(unittest.TestCase):
         self.assertEqual(run.returncode, 0, report[-6000:])
         self.assertNotIn("skipped 'runs inside", report)
         self.assertRegex(report, r"Ran \d+ tests")
+        # Only this test skips itself inside the child; a window that could not be built is a failure.
+        self.assertIn("OK (skipped=1)", report)
 
 
 if __name__ == "__main__":
