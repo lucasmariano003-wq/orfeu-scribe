@@ -4,12 +4,19 @@
     audit.py           print findings grouped by rule (exit 1 if any are outside the allowlist)
     audit.py --all     also print allowed findings (attribution and generalization documents)
 
+Every rule applies to the project's files: tracked ones and new ones Git would
+add. Files Git ignores (through .gitignore or a clone's own .git/info/exclude,
+such as local review copies) cannot reach a commit without `git add -f`, which
+makes them tracked again; they are still checked for stray data and secret-like
+strings. Outside a Git checkout every file gets every rule.
+
 A clean result means these patterns were not found; it does not prove that no
 secret or personal detail exists. Review by a person is still required.
 """
 from __future__ import annotations
 
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -48,6 +55,9 @@ ALLOWED = {
     "tests/test_text.py": {"personal or private context"},
 }
 DATA_SUFFIXES = {".wav", ".db", ".sqlite", ".ogg", ".mp3", ".mp4", ".mkv", ".env", ".pem", ".key"}
+# Rules that still apply to files Git ignores: a secret is a hazard wherever it sits in the checkout,
+# while names and paths only matter in what the project publishes. Stray data files are always reported.
+IGNORED_FILE_RULES = {"secret-like strings"}
 
 # Public project identifiers are not personal runtime data. Mask only these
 # exact approved namespace components and the author's public name and
@@ -57,16 +67,40 @@ PUBLIC_NAMESPACE = ("262500634+lucasmariano003-wq@users.noreply.github.com", "Lu
                     "github.com/lucasmariano003-wq", "lucasmariano003_wq", "lucasmariano003-wq.github.io")
 
 
-def files():
-    for path in sorted(ROOT.rglob("*")):
-        if path.is_file() and not SKIP_DIRS & set(path.relative_to(ROOT).parts):
+def files(root=ROOT):
+    for path in sorted(root.rglob("*")):
+        if path.is_file() and not SKIP_DIRS & set(path.relative_to(root).parts):
             yield path
 
 
-def audit():
+def ignored_by_git(root, relatives):
+    """The relatives Git ignores, if root is the top of a Git checkout; otherwise none.
+
+    Tracked files are never reported, even when an ignore pattern matches them. Any doubt (no git,
+    not a checkout, root inside another repository, a git error) means none: every rule applies.
+    """
+    try:
+        top = subprocess.run(["git", "-C", str(root), "rev-parse", "--show-toplevel"],
+                             capture_output=True, text=True)
+        if top.returncode or Path(top.stdout.strip()).resolve() != Path(root).resolve():
+            return set()
+        # Only the checkout's own rules (.gitignore files, .git/info/exclude), not the account's global ignore file.
+        run = subprocess.run(["git", "-C", str(root), "-c", "core.excludesFile=/dev/null",
+                              "check-ignore", "-z", "--stdin"],
+                             input="".join(f"{relative}\0" for relative in relatives), capture_output=True, text=True)
+    except OSError:
+        return set()
+    if run.returncode not in (0, 1):  # 1: nothing is ignored
+        return set()
+    return set(filter(None, run.stdout.split("\0")))
+
+
+def audit(root=ROOT):
     findings = []
-    for path in files():
-        relative = str(path.relative_to(ROOT))
+    paths = list(files(root))
+    ignored = ignored_by_git(root, [str(path.relative_to(root)) for path in paths])
+    for path in paths:
+        relative = str(path.relative_to(root))
         if path.suffix.lower() in DATA_SUFFIXES:
             findings.append(("stray data file", relative, 0, path.suffix))
         if path.suffix.lower() in BINARY:
@@ -79,7 +113,8 @@ def audit():
         scan_text = text
         for public_name in PUBLIC_NAMESPACE:
             scan_text = scan_text.replace(public_name, " " * len(public_name))
-        for rule, pattern in RULES.items():
+        rules = {rule: RULES[rule] for rule in IGNORED_FILE_RULES} if relative in ignored else RULES
+        for rule, pattern in rules.items():
             for match in re.finditer(pattern, scan_text, re.I if rule != "secret-like strings" else 0):
                 line = text.count("\n", 0, match.start()) + 1
                 findings.append((rule, relative, line, match[0]))

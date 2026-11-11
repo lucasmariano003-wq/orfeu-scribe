@@ -3,6 +3,7 @@ import gettext
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -92,6 +93,67 @@ class AuditTests(unittest.TestCase):
         import audit
         blocking = audit.blocking(audit.audit())
         self.assertEqual(blocking, [], "\n".join(f"{p}:{l} {r}: {t!r}" for r, p, l, t in blocking))
+
+    @staticmethod
+    def synthetic_tree(root):
+        """A local review copy, a scratch log, a forced-in copy and a new module, all synthetic."""
+        secret = "sk-" + "Z" * 40  # assembled here so this file never matches the secret rule
+        for relative, content in {"local-review/notes.md": "Notes about Hermes.\n",
+                                  "local-review/leak.txt": f"key = {secret}\n", "local-review/take.wav": "RIFF\n",
+                                  "local-review/forced.md": "Forced in: Hermes.\n", "scratch.log": "Hermes ran.\n",
+                                  "new_module.py": "# talks to Hermes\n"}.items():
+            (root / relative).parent.mkdir(parents=True, exist_ok=True)
+            (root / relative).write_text(content)
+
+    @staticmethod
+    def found(audit, root):
+        return {(rule, path) for rule, path, _line, _text in audit.blocking(audit.audit(root))}
+
+    @unittest.skipUnless(shutil.which("git"), "git is not installed")
+    def test_files_git_ignores_keep_only_the_hazard_rules(self):
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import audit
+        with tempfile.TemporaryDirectory() as name:
+            root, account = Path(name) / "checkout", Path(name) / "account"
+            root.mkdir()
+            def git(*args):
+                subprocess.run(["git", "-C", str(root), *args], check=True, capture_output=True)
+            git("init", "-q")
+            (root / ".git/info").mkdir(exist_ok=True)
+            (root / ".git/info/exclude").write_text("local-review/\n")
+            (root / ".gitignore").write_text("*.log\n")
+            self.synthetic_tree(root)
+            git("add", "-f", "local-review/forced.md")
+            # The account's global ignore file is not the project's policy: a new module stays audited.
+            (account / "git").mkdir(parents=True)
+            (account / "git/ignore").write_text("*.py\n")
+            with unittest.mock.patch.dict(os.environ, XDG_CONFIG_HOME=str(account)):
+                found = self.found(audit, root)
+            self.assertEqual(found, {
+                ("secret-like strings", "local-review/leak.txt"),      # a secret counts wherever it sits
+                ("stray data file", "local-review/take.wav"),          # and so does a recording
+                ("previous provider coupling", "local-review/forced.md"),  # tracked again once forced in
+                ("previous provider coupling", "new_module.py"),       # new files, before any git add
+            })
+
+    def test_outside_a_git_checkout_every_rule_applies(self):
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import audit
+        with tempfile.TemporaryDirectory() as name:
+            # A tree nested in a checkout is not judged by that checkout's ignore rules either.
+            root = Path(name) / "nested"
+            if shutil.which("git"):
+                subprocess.run(["git", "-C", name, "init", "-q"], check=True, capture_output=True)
+                (Path(name) / ".git/info").mkdir(exist_ok=True)
+                (Path(name) / ".git/info/exclude").write_text("local-review/\n*.log\n")
+            self.synthetic_tree(root)
+            found = self.found(audit, root)
+        self.assertEqual(found, {("previous provider coupling", "local-review/notes.md"),
+                                 ("secret-like strings", "local-review/leak.txt"),
+                                 ("stray data file", "local-review/take.wav"),
+                                 ("previous provider coupling", "local-review/forced.md"),
+                                 ("previous provider coupling", "scratch.log"),
+                                 ("previous provider coupling", "new_module.py")})
 
     def test_prompts_and_interface_carry_no_personal_style(self):
         from orfeuscribe import text
